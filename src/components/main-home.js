@@ -40,7 +40,32 @@ class Home extends Component {
         // spotifyApi.getArtist("3Nrfpe0tUJi4K4DXYWgMUX").then(res => console.log(res));
     }
 
-
+    analyzeTracks() {   // Analyze and return average of properties of top tracks
+        let ids = [];
+        spotifyApi.getMyTopTracks({ "time_range": "short_term" }).then(res => {
+            ids = res.items.map(item => item.id);
+        }).then(() => {
+            spotifyApi.getAudioFeaturesForTracks(ids).then(res => {
+                // let total = tracks.length;
+                let properties = {};
+                let count = 0;
+                res.audio_features.forEach(el => {
+                    for (let i in el) {
+                        if (!isNaN(el[i])) {
+                            if (!properties[i]) {
+                                properties[i] = el[i];
+                            } else properties[i] += el[i];
+                        }
+                    }
+                    count++;
+                });
+                for (let i in properties) {     // Get averages of audio features
+                    properties[i] = properties[i] / count;
+                }
+                return properties;
+            });
+        })
+    }
 
     mapInitialGenres(genres, mapping) {
         let count = 0;
