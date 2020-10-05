@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
-import { getHashParams } from '../helpers';
+import { getHashParams, shuffle } from '../helpers';
 
 
 const spotifyApi = new Spotify();
@@ -42,16 +42,15 @@ class Home extends Component {
 
     analyzeTracks() {   // Analyze and return average of properties of top tracks
         let ids = [];
-        spotifyApi.getMyTopTracks({ "time_range": "short_term" }).then(res => {
+        spotifyApi.getMyTopTracks({ "time_range": "medium_term" }).then(res => {
             ids = res.items.map(item => item.id);
         }).then(() => {
             spotifyApi.getAudioFeaturesForTracks(ids).then(res => {
-                // let total = tracks.length;
                 let properties = {};
                 let count = 0;
                 res.audio_features.forEach(el => {
                     for (let i in el) {
-                        if (!isNaN(el[i])) {
+                        if (!isNaN(el[i])) {    // Only process properties with numeric values
                             if (!properties[i]) {
                                 properties[i] = el[i];
                             } else properties[i] += el[i];
@@ -62,12 +61,41 @@ class Home extends Component {
                 for (let i in properties) {     // Get averages of audio features
                     properties[i] = properties[i] / count;
                 }
+                console.log(properties)
                 return properties;
             });
         })
     }
 
-    mapInitialGenres(genres, mapping) {
+    scaleGenreStats(genres) {       // Scale genre percentages to correct percentage ex. genre: 0.28 >> 0.36
+        let sum = 0;
+        for (let i in genres) sum += genres[i];
+        for (let i in genres) {
+            genres[i] = genres[i] / sum;
+        }
+        return genres;
+    }
+
+    getArtistsFromCollection(genres, collection) {  // Returns a jazz collection with only target genres
+        let artists = {};                           // ex. { "pop": [0, 2, 1], "rock": [3, 5, 6]}
+        for (let i in genres) {
+            artists[i] = [];
+            if (collection[i]) {
+                shuffle(collection[i]);
+                let ids = [];
+                for (let j = 0; j < 5 && j < collection[i].length; j++) {
+                    ids.push(collection[i][j]);
+                }
+                artists[i] = ids;
+            }
+        }
+        console.log(artists);
+        return artists;
+    }
+
+    //getRecommendations (artists, genres, tracks, audioProperties)
+
+    mapInitialGenres(genres, mapping) { // maps list of genres to a mapping ex. "house" > "house": ["electronic"]
         let count = 0;
         let genreList = [];
         for (let i in genres) {
@@ -81,6 +109,7 @@ class Home extends Component {
             }
         }
         console.log(genreList);
+        return genreList;
     }
 
     componentDidMount() {
@@ -92,8 +121,12 @@ class Home extends Component {
                 // console.log(res);
             })
         }
-        this.getTopArtists();
-        this.analyzeTracks();
+        // this.getTopArtists();
+        // this.analyzeTracks();
+        this.getArtistsFromCollection(
+            { "pop": 0.34, "rock": 0.54 },
+            { "pop": [1, 2, 3, 4, 5, 6], "rock": [1, 2, 3] }
+        );
     }
     render() {
         return (
