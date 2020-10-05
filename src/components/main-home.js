@@ -77,7 +77,7 @@ class Home extends Component {
     }
 
     getArtistsFromCollection(genres, collection) {  // Returns a jazz collection with only target genres
-        let artists = {};                           // ex. { "pop": [0, 2, 1], "rock": [3, 5, 6]}
+        let artists = {};                           // ex. { "pop": [artistis0, 2, 1], "rock": [3, 5, 6]}
         for (let i in genres) {
             artists[i] = [];
             if (collection[i]) {
@@ -89,10 +89,32 @@ class Home extends Component {
                 artists[i] = ids;
             }
         }
-        console.log(artists);
+        // console.log(artists);
         return artists;
     }
 
+    getSeedTracks(artistCollection) {       // Return track ids by genre to feed into recommendation
+        let tracks = {};                    // ex. {"pop": [trackid1, trackid2, ...], ...}
+        let requests = [];
+        for (let i in artistCollection) {
+            tracks[i] = [];
+            for (let j = 0; j < artistCollection[i].length; j++) {
+                requests.push(spotifyApi.getArtistTopTracks(artistCollection[i][j], "US"));
+            }
+        }
+        Promise.all(requests).then(data => {
+            let idx = 0;
+            for (let i in artistCollection) {
+                for (let j = 0; j < artistCollection[i].length; j++) {
+                    let d = data[idx++];
+                    let songIds = shuffle(d.tracks.map(el => el.id));
+                    tracks[i].push(songIds[0]);
+                }
+            }
+            console.log(tracks);
+            return tracks;
+        });
+    }
     //getRecommendations (artists, genres, tracks, audioProperties)
 
     mapInitialGenres(genres, mapping) { // maps list of genres to a mapping ex. "house" > "house": ["electronic"]
@@ -108,7 +130,7 @@ class Home extends Component {
                 }
             }
         }
-        console.log(genreList);
+        // console.log(genreList);
         return genreList;
     }
 
@@ -123,10 +145,14 @@ class Home extends Component {
         }
         // this.getTopArtists();
         // this.analyzeTracks();
-        this.getArtistsFromCollection(
-            { "pop": 0.34, "rock": 0.54 },
-            { "pop": [1, 2, 3, 4, 5, 6], "rock": [1, 2, 3] }
-        );
+        this.getSeedTracks(
+            this.getArtistsFromCollection(
+                { "pop": 0.34, "rock": 0.54 },
+                {
+                    "pop": ["1FC0psUheo5L2kUtj53MF9", "3uoY3Ibj2qOK3bb47cpKs6"],
+                    "rock": ["1W8TbFzNS15VwsempfY12H", "6ra4GIOgCZQZMOaUECftGN"]
+                }
+            ))
     }
     render() {
         return (
