@@ -112,10 +112,31 @@ class Home extends Component {
                 }
             }
             console.log(tracks);
+
+            this.getRecommendations(artistCollection, tracks, {});
             return tracks;
         });
     }
-    //getRecommendations (artists, genres, tracks, audioProperties)
+    getRecommendations(artists, tracks, audioProperties) {
+        let recommendations = [];
+        let requests = [];
+        for (let i in artists) {
+            requests.push(
+                spotifyApi.getRecommendations({
+                    "limit": 10,
+                    "market": "US",
+                    "seed_artists": artists[i],
+                    "seed_tracks": tracks[i],
+                    "seed_genres": "jazz"
+                })
+            )
+        }
+
+        Promise.all(requests).then(data => {
+            console.log(data);
+
+        })
+    }
 
     mapInitialGenres(genres, mapping) { // maps list of genres to a mapping ex. "house" > "house": ["electronic"]
         let count = 0;
