@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { getHashParams, shuffle } from '../helpers';
 
-
+const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
 
 class Home extends Component {
@@ -138,6 +138,14 @@ class Home extends Component {
         })
     }
 
+    calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
+        let genreTrackNum = {};
+        for (let i in scaledGenres) {
+            genreTrackNum[i] = Math.round(scaledGenres[i] * NUMOFTRACKS);
+        }
+        return genreTrackNum;
+    }
+
     mapInitialGenres(genres, mapping) { // maps list of genres to a mapping ex. "house" > "house": ["electronic"]
         let count = 0;
         let genreList = [];
@@ -166,6 +174,7 @@ class Home extends Component {
         }
         // this.getTopArtists();
         // this.analyzeTracks();
+        this.calcTracksPerGenre(this.scaleGenreStats({ "pop": 0.34, "rock": 0.54 }));
         this.getSeedTracks(
             this.getArtistsFromCollection(
                 { "pop": 0.34, "rock": 0.54 },
