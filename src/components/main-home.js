@@ -9,7 +9,7 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            recommendations: []
         }
     }
 
@@ -113,11 +113,22 @@ class Home extends Component {
             }
             console.log(tracks);
 
-            this.getRecommendations(artistCollection, tracks, {});
+            this.saveRecommendations(
+                this.getRecommendations(
+                    artistCollection,
+                    tracks,
+                    {},
+                    this.calcTracksPerGenre(this.scaleGenreStats({ "pop": 0.34, "rock": 0.54 }))
+                ))
             return tracks;
         });
     }
-    getRecommendations(artists, tracks, audioProperties) {
+    saveRecommendations(recommendations) {
+        this.setState({
+            recommendations: recommendations
+        });
+    }
+    getRecommendations(artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [];
         let requests = [];
         for (let i in artists) {
@@ -133,15 +144,25 @@ class Home extends Component {
         }
 
         Promise.all(requests).then(data => {
-            console.log(data);
-
+            let idx = 0;
+            data.forEach(el => {
+                console.log(el)
+                for (let i = 0; i < genreTrackNum[idx]; i++) {
+                    if (el.tracks[i] !== undefined)
+                        recommendations.push(el.tracks[i].name); // change to id
+                }
+                idx++;
+            });
+            console.log(recommendations);
         })
+        return recommendations;
     }
 
     calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
-        let genreTrackNum = {};
+        let genreTrackNum = [];
+        let idx = 0;
         for (let i in scaledGenres) {
-            genreTrackNum[i] = Math.round(scaledGenres[i] * NUMOFTRACKS);
+            genreTrackNum[idx++] = Math.round(scaledGenres[i] * NUMOFTRACKS);
         }
         return genreTrackNum;
     }
@@ -174,7 +195,6 @@ class Home extends Component {
         }
         // this.getTopArtists();
         // this.analyzeTracks();
-        this.calcTracksPerGenre(this.scaleGenreStats({ "pop": 0.34, "rock": 0.54 }));
         this.getSeedTracks(
             this.getArtistsFromCollection(
                 { "pop": 0.34, "rock": 0.54 },
