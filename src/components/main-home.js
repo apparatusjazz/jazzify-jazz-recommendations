@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { getHashParams, shuffle } from '../helpers';
+import Track from './track';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -9,7 +10,11 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            recommendations: []
+            recommendations: [],
+            playlist: [],
+            genreFilters: {},
+            recs: []
+
         }
     }
 
@@ -111,15 +116,15 @@ class Home extends Component {
                     tracks[i].push(songIds[0]);
                 }
             }
-            console.log(tracks);
 
-            this.saveRecommendations(
-                this.getRecommendations(
-                    artistCollection,
-                    tracks,
-                    {},
-                    this.calcTracksPerGenre(this.scaleGenreStats({ "pop": 0.34, "rock": 0.54 }))
-                ))
+            // this.saveRecommendations(
+            this.getRecommendations(
+                artistCollection,
+                tracks,
+                {},
+                this.calcTracksPerGenre(this.scaleGenreStats({ "pop": 0.34, "rock": 0.54 }))
+            )
+
             return tracks;
         });
     }
@@ -127,6 +132,9 @@ class Home extends Component {
         this.setState({
             recommendations: recommendations
         });
+
+        let recs = this.createTracks(recommendations);
+        console.log(recs)
     }
     getRecommendations(artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [];
@@ -146,16 +154,14 @@ class Home extends Component {
         Promise.all(requests).then(data => {
             let idx = 0;
             data.forEach(el => {
-                console.log(el)
                 for (let i = 0; i < genreTrackNum[idx]; i++) {
                     if (el.tracks[i] !== undefined)
-                        recommendations.push(el.tracks[i].name); // change to id
+                        recommendations.push(el.tracks[i]);
                 }
                 idx++;
             });
-            console.log(recommendations);
+            this.saveRecommendations(recommendations)
         })
-        return recommendations;
     }
 
     calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
@@ -184,6 +190,21 @@ class Home extends Component {
         return genreList;
     }
 
+    createTracks(recommendations) {
+        let track = (album, song, artist) => {
+            return (
+                <Track
+                    album={album}
+                    song={song}
+                    artist={artist}
+                />
+            )
+        }
+        return recommendations.map(el =>
+            track(el.album.images[2].url, el.name, el.artists[0].name)
+        )
+    }
+
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
@@ -205,9 +226,11 @@ class Home extends Component {
             ))
     }
     render() {
+        let recs = this.createTracks(this.state.recommendations)
         return (
             <div>
                 <h1>Jazzify</h1>
+                {recs}
                 <div>
                     <a id="login-btn" href={"http://localhost:8888/login"}>Login</a>
                 </div>
