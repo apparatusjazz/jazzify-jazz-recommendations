@@ -135,6 +135,7 @@ class Home extends Component {
 
         let recs = this.createTracks(recommendations);
         console.log(recs)
+        this.addToPlaylist("");
     }
     getRecommendations(artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [];
@@ -205,10 +206,19 @@ class Home extends Component {
         )
     }
 
-    // addToPlaylist(key) {
-    //     let playlist = this.state.playlist;
-    //     playlist
-    // }
+    addToPlaylist(id) {
+        let playlist = this.state.playlist;
+        let recs = this.state.recommendations;
+
+        let track;
+        recs.forEach(el => {
+            if (el.id === id) track = el;
+        })
+        playlist.push(track);
+        this.setState({
+            playlist: playlist
+        })
+    }
 
     componentDidMount() {
         const params = getHashParams();
