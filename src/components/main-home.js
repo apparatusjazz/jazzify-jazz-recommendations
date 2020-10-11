@@ -186,14 +186,14 @@ class Home extends Component {
                 }
             }
         }
-        // console.log(genreList);
         return genreList;
     }
 
     createTracks(recommendations) {
-        let track = (album, song, artist) => {
+        let track = (id, album, song, artist) => {
             return (
                 <Track
+                    key={id}
                     album={album}
                     song={song}
                     artist={artist}
@@ -201,18 +201,20 @@ class Home extends Component {
             )
         }
         return recommendations.map(el =>
-            track(el.album.images[2].url, el.name, el.artists[0].name)
+            track(el.id, el.album.images[2].url, el.name, el.artists[0].name)
         )
     }
+
+    // addToPlaylist(key) {
+    //     let playlist = this.state.playlist;
+    //     playlist
+    // }
 
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
             spotifyApi.setAccessToken(params.access_token);
             console.log("logged in successfully!")
-            spotifyApi.getMyCurrentPlaybackState().then(res => {
-                // console.log(res);
-            })
         }
         // this.getTopArtists();
         // this.analyzeTracks();
