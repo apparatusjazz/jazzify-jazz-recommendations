@@ -220,6 +220,19 @@ class Home extends Component {
         })
     }
 
+    addAllToPlaylist() {
+        let recs = this.state.recommendations;
+        this.setState({
+            playlist: recs
+        });
+    }
+
+    clearPlaylist() {
+        this.setState({
+            playlist: []
+        });
+    }
+
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
