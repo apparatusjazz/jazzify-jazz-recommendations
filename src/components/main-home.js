@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Spotify from 'spotify-web-api-js';
 import { getHashParams, shuffle } from '../helpers';
 import Track from './track';
+import { Container, Grid, Col, Row } from 'react-bootstrap';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -255,7 +256,40 @@ class Home extends Component {
         return (
             <div>
                 <h1>Jazzify</h1>
-                {recs}
+                <Container fluid>
+                    <Row>
+                        <Col id="recs-container" lg={5}>
+                            <Row>
+                                <Col lg={2}>
+                                </Col>
+                                <Col lg={5}>
+                                    Artist
+                                </Col>
+                                <Col lg={5}>
+                                    Song
+                                </Col>
+                            </Row>
+                            {recs}
+                        </Col>
+                        <Col id="filter-container" lg={2}>
+                            <Row>
+                                Filters
+                            </Row>
+                        </Col>
+                        <Col id="playlist-container" lg={5}>
+                            <Row>
+                                <Col lg={2}>
+                                </Col>
+                                <Col lg={5}>
+                                    Artist
+                                </Col>
+                                <Col lg={5}>
+                                    Song
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Container>
                 <div>
                     <a id="login-btn" href={"http://localhost:8888/login"}>Login</a>
                 </div>

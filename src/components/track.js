@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Container, Row, Col } from 'react-bootstrap';
 
 class Track extends Component {
     constructor(props) {
@@ -6,11 +7,19 @@ class Track extends Component {
     }
     render() {
         return (
-            <div>
-                <img src={this.props.album} alt="Album Cover" />
-                {this.props.song}
-                {this.props.artist}
-            </div>
+            <Row>
+                <Col lg={2}>
+                    <img src={this.props.album} alt="Album Cover" />
+                </Col>
+                <Col lg={5}>
+
+                    {this.props.song}
+                </Col>
+                <Col lg={5}>
+                    {this.props.artist}
+                </Col>
+            </Row>
+
         )
     }
 }
