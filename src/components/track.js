@@ -8,7 +8,7 @@ class Track extends Component {
     render() {
         return (
             <Row>
-                <Col lg={2}>
+                <Col lg={1}>
                     <img src={this.props.album} alt="Album Cover" />
                 </Col>
                 <Col lg={5}>
@@ -17,6 +17,9 @@ class Track extends Component {
                 </Col>
                 <Col lg={5}>
                     {this.props.artist}
+                </Col>
+                <Col lg={1}>
+                    <button className="btn" onClick={() => { this.props.addToPlaylist(this.props.id) }}>+</button>
                 </Col>
             </Row>
 
