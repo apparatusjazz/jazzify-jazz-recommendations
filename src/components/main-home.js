@@ -17,6 +17,9 @@ class Home extends Component {
             recs: []
 
         }
+        this.addToPlaylist = this.addToPlaylist.bind(this);
+        this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
+        this.clearPlaylist = this.clearPlaylist.bind(this);
     }
 
     getTopArtists() {
@@ -136,7 +139,6 @@ class Home extends Component {
 
         let recs = this.createTracks(recommendations);
         console.log(recs)
-        this.addToPlaylist("");
     }
     getRecommendations(artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [];
@@ -196,6 +198,8 @@ class Home extends Component {
             return (
                 <Track
                     key={id}
+                    id={id}
+                    addToPlaylist={this.addToPlaylist}
                     album={album}
                     song={song}
                     artist={artist}
@@ -252,7 +256,8 @@ class Home extends Component {
             ))
     }
     render() {
-        let recs = this.createTracks(this.state.recommendations)
+        let recs = this.createTracks(this.state.recommendations);
+        let playlist = this.createTracks(this.state.playlist);
         return (
             <div>
                 <h1>Jazzify</h1>
@@ -260,13 +265,16 @@ class Home extends Component {
                     <Row>
                         <Col id="recs-container" lg={5}>
                             <Row>
-                                <Col lg={2}>
+                                <Col lg={1}>
+                                </Col>
+                                <Col lg={5}>
+                                    Song
                                 </Col>
                                 <Col lg={5}>
                                     Artist
                                 </Col>
-                                <Col lg={5}>
-                                    Song
+                                <Col lg={1}>
+                                    <button onClick={this.addAllToPlaylist} className="btn">Add all</button>
                                 </Col>
                             </Row>
                             {recs}
@@ -278,15 +286,19 @@ class Home extends Component {
                         </Col>
                         <Col id="playlist-container" lg={5}>
                             <Row>
-                                <Col lg={2}>
-                                </Col>
-                                <Col lg={5}>
-                                    Artist
+                                <Col lg={1}>
                                 </Col>
                                 <Col lg={5}>
                                     Song
                                 </Col>
+                                <Col lg={5}>
+                                    Artist
+                                </Col>
+                                <Col lg={1}>
+                                    <button onClick={this.clearPlaylist} className="btn">Remove all</button>
+                                </Col>
                             </Row>
+                            {playlist}
                         </Col>
                     </Row>
                 </Container>
