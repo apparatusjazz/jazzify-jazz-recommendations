@@ -34,6 +34,7 @@ const initalMappings = {
     "folk": ["folk"],
     "forro": ["latin"],
     "funk": ["funk", "soul"],
+    "fusion": ["fusion"],
     "garage": ["electronic"],
     "gospel": ["soul", "funk"],
     "goth": ["metal"],
@@ -88,6 +89,7 @@ const initalMappings = {
     "romance": ["smooth", "classic", "saxophone"],
     "salsa": ["latin"],
     "samba": ["latin"],
+    "saxophone": ["saxophone"],
     "ska": ["reggae"],
     "sleep": ["chill", "piano"],
     "soul": ["soul"],
@@ -98,6 +100,7 @@ const initalMappings = {
     "tango": ["latin"],
     "techno": ["electronic", "dance"],
     "trance": ["electronic", "chill"],
+    "trumpet": ["trumpet"],
     "trip-hop": ["chill", "hiphop"],
     "world-music": ["world"]
 }

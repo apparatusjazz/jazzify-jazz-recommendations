@@ -129,7 +129,7 @@ const jazzCollection = {
         "2CH9bD5RtnDcm9O23JByN7",
         "1oTIG44ppYw0nUBqFvZ5Q5",
         "14RXohtx6NiBGFTW8IdmAK",
-        "15kazQHHvIeFD1WYYjlFXG"
+        "5YfW24O2P3ljTAZjBRr4jy"
     ],
     "happy": [
         "6RuS4udHwx3C9ysk4KXtNw"
@@ -151,7 +151,9 @@ const jazzCollection = {
         "01mXk9IDlVczWwZvVHAiIS",
         "3Rq3YOF9YG9YfCWD4D56RZ"
     ],
-    "indie": [],
+    "indie": [
+        "60k4atxgEIMFz4DWHp0le1"
+    ],
     "japanese": [
         "3gi1r8g39AZGZO7iwEw4lh",
         "6RuS4udHwx3C9ysk4KXtNw",
@@ -180,7 +182,7 @@ const jazzCollection = {
         "77ZUbcdoU5KCPHNUl8bgQy",
         "0yFvXd36g5sNKYDi0Kkvl8",
         "6sMYDCMbXwodgyR2vejSEb",
-        "15kazQHHvIeFD1WYYjlFXG",
+        "5YfW24O2P3ljTAZjBRr4jy",
         "1gMQhZV6otY4KEVN3yujDJ"
 
     ],
