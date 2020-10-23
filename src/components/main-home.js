@@ -14,7 +14,7 @@ class Home extends Component {
         super(props);
         this.state = {
             recommendations: [],
-            genres: {},
+            scaledGenres: {},
             playlist: [],
             genreFilters: {},
             recs: [],
@@ -88,15 +88,14 @@ class Home extends Component {
         return newProps;
     }
 
+    // return value ex. {"pop": 0.6, "rock": 0.4}
     scaleGenreStats(genres) {       // Scale genre percentages to correct percentage ex. genre: 0.28 >> 0.36
-        let sum = 0;                // return value ex. {"pop": 0.6, "rock": 0.4}
+        let sum = 0;
         for (let i in genres) sum += genres[i];
         for (let i in genres) {
             genres[i] = genres[i] / sum;
         }
-        this.setState({
-            genres: genres
-        })
+        this.setState({ scaledGenres: genres });
         return genres;
     }
 
@@ -125,12 +124,12 @@ class Home extends Component {
     getSeedTracks() {       // Return track ids by genre to feed into recommendation
         let scaledGenres, artistCollection;
         spotifyApi.getMyTopArtists({ "time_range": "medium_term" }).then(res => {
-            let genres = [];
+            let genres = {};
             res.items.forEach(idx => {
                 for (let i in idx.genres) {
                     let splitWords = idx.genres[i].split(" ");
                     for (let j in splitWords) {
-                        genres.push(splitWords[j]);
+                        genres[i] = splitWords[j];
                     }
                 }
             });
@@ -156,6 +155,7 @@ class Home extends Component {
                     }
                 }
                 this.getRecommendations(
+                    scaledGenres,
                     artistCollection,
                     tracks,
                     this.analyzeTracks(),
@@ -164,12 +164,7 @@ class Home extends Component {
             })
         })
     }
-    saveRecommendations(recommendations) {
-        this.setState({
-            recommendations: recommendations
-        });
-    }
-    getRecommendations(artists, tracks, audioProperties, genreTrackNum) {
+    getRecommendations(scaledGenres, artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [];
         let requests = [];
 
@@ -198,7 +193,10 @@ class Home extends Component {
                 }
                 idx++;
             });
-            this.saveRecommendations(recommendations)
+            this.setState({
+                recommendations: recommendations,
+                scaledGenres: scaledGenres
+            });
         })
     }
 
@@ -213,7 +211,7 @@ class Home extends Component {
 
     mapInitialGenres(genres, mapping) { // maps list of genres to a mapping ex. "house" > "house": ["electronic"]
         // return value ex. [pop: 2, rock: 3, jazz: 75]
-        let genreList = [];
+        let genreList = {};
         for (let i in genres) {
             if (genres[i] in mapping) {
                 for (let j in mapping[genres[i]]) {
