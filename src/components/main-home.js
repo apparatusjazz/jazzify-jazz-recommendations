@@ -5,6 +5,7 @@ import Track from './track';
 import { Container, Col, Row } from 'react-bootstrap';
 import jazzCollection from '../jazz-collection';
 import initalMappings from '../initial-map';
+import Filter from './filters';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -23,6 +24,8 @@ class Home extends Component {
         this.addToPlaylist = this.addToPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
         this.clearPlaylist = this.clearPlaylist.bind(this);
+        this.storeValue = this.storeValue.bind(this);
+        this.updateRecommendations = this.updateRecommendations.bind(this);
     }
 
     getTopArtists() {       // Return array of genre tags ex. ["indie", "soul", "funk", "sould"...]
@@ -47,7 +50,7 @@ class Home extends Component {
         let ids = [];   // return val {danceability: 0.5746500000000001, energy: 0.57945, …}
         spotifyApi.getMyTopTracks({ "time_range": "medium_term" }).then(res => {
             ids = res.items.map(item => item.id);
-        }).then(() => {
+        }).then(
             spotifyApi.getAudioFeaturesForTracks(ids).then(res => {
                 let properties = {};
                 let count = 0;
@@ -66,8 +69,9 @@ class Home extends Component {
                 }
                 properties = this.processAnalysis(properties);
                 return properties;
-            });
-        })
+            })
+        )
+
     }
 
     processAnalysis(properties) {
@@ -77,6 +81,7 @@ class Home extends Component {
         delete properties["speechiness"];
         delete properties["time_signature"];
         delete properties["liveness"];
+        delete properties["loudness"];
 
         let newProps = {};
         for (let key in properties) {
@@ -122,7 +127,8 @@ class Home extends Component {
     }
 
     getSeedTracks() {       // Return track ids by genre to feed into recommendation
-        let scaledGenres, artistCollection;
+        let scaledGenres, artistCollection, audioProperties, ids = [];
+
         spotifyApi.getMyTopArtists({ "time_range": "medium_term" }).then(res => {
             let genres = {};
             res.items.forEach(idx => {
@@ -136,36 +142,62 @@ class Home extends Component {
             let a = this.mapInitialGenres(genres, initalMappings);
             scaledGenres = this.scaleGenreStats(a);
             artistCollection = this.getArtistsFromCollection(scaledGenres, jazzCollection);
-        }).then(() => {
-            let tracks = {};
-            let requests = [];
-            for (let i in artistCollection) {
-                tracks[i] = [];
-                for (let j = 0; j < artistCollection[i].length; j++) {
-                    requests.push(spotifyApi.getArtistTopTracks(artistCollection[i][j], "US"));
+        }).then(() =>
+            spotifyApi.getMyTopTracks({ "time_range": "medium_term" })
+        )
+            .then(res => {
+                ids = res.items.map(item => item.id);
+            }).then(
+                () => spotifyApi.getAudioFeaturesForTracks(ids)
+            ).then(res => {
+                let properties = {};
+                let count = 0;
+                res.audio_features.forEach(el => {
+                    for (let i in el) {
+                        if (!isNaN(el[i])) {    // Only process properties with numeric values
+                            if (!properties[i]) {
+                                properties[i] = el[i];
+                            } else properties[i] += el[i];
+                        }
+                    }
+                    count++;
+                });
+                for (let i in properties) {     // Get averages of audio features
+                    properties[i] = properties[i] / count;
                 }
-            }
-            Promise.all(requests).then(data => {
-                let idx = 0;
+                audioProperties = this.processAnalysis(properties);
+            })
+            .then(() => {
+                let tracks = {};
+                let requests = [];
                 for (let i in artistCollection) {
+                    tracks[i] = [];
                     for (let j = 0; j < artistCollection[i].length; j++) {
-                        let d = data[idx++];
-                        let songIds = shuffle(d.tracks.map(el => el.id));
-                        tracks[i].push(songIds[0]);
+                        requests.push(spotifyApi.getArtistTopTracks(artistCollection[i][j], "US"));
                     }
                 }
-                this.getRecommendations(
-                    scaledGenres,
-                    artistCollection,
-                    tracks,
-                    this.analyzeTracks(),
-                    this.calcTracksPerGenre(scaledGenres)
-                );
+                Promise.all(requests).then(data => {
+                    let idx = 0;
+                    for (let i in artistCollection) {
+                        for (let j = 0; j < artistCollection[i].length; j++) {
+                            let d = data[idx++];
+                            let songIds = shuffle(d.tracks.map(el => el.id));
+                            tracks[i].push(songIds[0]);
+                        }
+                    }
+                    this.getRecommendations(
+                        scaledGenres,
+                        artistCollection,
+                        tracks,
+                        audioProperties,
+                        this.calcTracksPerGenre(scaledGenres)
+                    );
+                })
             })
-        })
     }
     getRecommendations(scaledGenres, artists, tracks, audioProperties, genreTrackNum) {
-        let recommendations = [];
+        console.log(scaledGenres, artists)
+        let recommendations = [], trackIds = [];
         let requests = [];
 
         for (let i in artists) {
@@ -188,8 +220,10 @@ class Home extends Component {
             let idx = 0;
             data.forEach(el => {
                 for (let i = 0; i < genreTrackNum[idx]; i++) {
-                    if (el.tracks[i] !== undefined && !recommendations.includes(el.tracks[i]))
+                    if (el.tracks[i] !== undefined && !trackIds.includes(el.tracks[i].id)) {
+                        trackIds.push(el.tracks[i].id);
                         recommendations.push(el.tracks[i]);
+                    }
                 }
                 idx++;
             });
@@ -198,6 +232,12 @@ class Home extends Component {
                 scaledGenres: scaledGenres
             });
         })
+    }
+
+    updateRecommendations() {
+        let genreTrackNum = this.calcTracksPerGenre(this.state.scaledGenres);
+        let collection = this.getArtistsFromCollection(this.state.scaledGenres, jazzCollection);
+        this.getRecommendations(this.state.scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
     }
 
     calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
@@ -269,6 +309,40 @@ class Home extends Component {
         });
     }
 
+    generateFilters(input, type) {
+        let filter = (name, value, func) => {
+            let min = name === "target_tempo" ? 30 : 0;
+            let max = name === "target_tempo" ? 350 : 100;
+            let val = name === "target_tempo" ? value : value * 100;
+            return (<Filter
+                key={name}
+                value={val}
+                name={name}
+                type={type}
+                min={min}
+                max={max}
+                storeValue={func}
+            />)
+        };
+        let arr = [];
+        for (let key in input) {
+            arr.push(filter(key, input[key], this.storeValue));
+        }
+        return arr;
+    }
+
+    storeValue(id, val, type) {  // adjust filters
+        if (type === "genre") {
+            let modified = this.state.scaledGenres;
+            modified[id] = val;
+            this.setState({ scaledGenres: modified });
+        } else {
+            let modified = this.state.audioFeatures;
+            modified[id] = val;
+            this.setState({ audioFeatures: modified });
+        }
+    }
+
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
@@ -280,6 +354,7 @@ class Home extends Component {
     render() {
         let recs = this.createTracks(this.state.recommendations);
         let playlist = this.createTracks(this.state.playlist);
+        let audioF = this.generateFilters(this.state.audioFeatures, "audio");
         return (
             <div>
                 <h1>Jazzify</h1>
@@ -289,7 +364,7 @@ class Home extends Component {
                             <Row>
                                 <Col lg={2}>
                                 </Col>
-                                <Col lg={7}>
+                                <Col lg={5}>
                                     Song & Artist
                                 </Col>
                                 <Col lg={1}>
@@ -302,12 +377,14 @@ class Home extends Component {
                             <Row>
                                 Filters
                             </Row>
+                            {audioF}
+                            <button onClick={this.updateRecommendations}>Refresh</button>
                         </Col>
                         <Col id="playlist-container" lg={5}>
                             <Row>
                                 <Col lg={2}>
                                 </Col>
-                                <Col lg={7}>
+                                <Col lg={5}>
                                     Song & Artist
                                 </Col>
                                 <Col lg={1}>
