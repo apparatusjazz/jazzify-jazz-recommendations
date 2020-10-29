@@ -1,0 +1,8 @@
+.filter-name {
+    text-align: left;
+    font-size: 11px;
+}
+
+.MuiSlider-root {
+    padding: 10px 0 !important;
+}

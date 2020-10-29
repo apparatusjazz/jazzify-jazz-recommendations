@@ -1,0 +1,22 @@
+.album-art {
+    width: 45px;
+    height: 45px;
+    margin: 2px 0;
+}
+
+.artist {
+    font-size: 11px;
+    text-align: left;
+}
+
+.song {
+    font-size: 12px;
+    text-align: left;
+    margin-top: 4px;
+}
+
+.text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
