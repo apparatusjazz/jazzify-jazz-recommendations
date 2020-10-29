@@ -1,23 +1,25 @@
 import React, { Component } from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import '../css/track.css';
 
 class Track extends Component {
-    constructor(props) {
-        super(props);
-    }
+
     render() {
         return (
             <Row>
-                <Col lg={1}>
-                    <img src={this.props.album} alt="Album Cover" />
+                <Col lg={2}>
+                    <img className="album-art" src={this.props.album} alt="Album Cover" />
                 </Col>
-                <Col lg={5}>
 
-                    {this.props.song}
-                </Col>
                 <Col lg={5}>
-                    {this.props.artist}
+                    <Row className="song text">
+                        {this.props.song}
+                    </Row>
+                    <Row className="artist text">
+                        {this.props.artist}
+                    </Row>
                 </Col>
+
                 <Col lg={1}>
                     <button className="btn" onClick={() => { this.props.addToPlaylist(this.props.id) }}>+</button>
                 </Col>
