@@ -19,7 +19,8 @@ class Home extends Component {
             playlist: [],
             genreFilters: {},
             recs: [],
-            audioFeatures: {}
+            audioFeatures: {},
+            genreSelector: ""
         }
         this.addToPlaylist = this.addToPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
@@ -196,7 +197,6 @@ class Home extends Component {
             })
     }
     getRecommendations(scaledGenres, artists, tracks, audioProperties, genreTrackNum) {
-        console.log(scaledGenres, artists)
         let recommendations = [], trackIds = [];
         let requests = [];
 
@@ -206,11 +206,12 @@ class Home extends Component {
                 "market": "US",
                 "seed_artists": artists[i],
                 // "seed_tracks": tracks[i],
-                "seed_genres": "jazz"
+                // "seed_genres": "jazz"
             };
             for (let key in audioProperties) {
                 params[key] = audioProperties[key];
             }
+            console.log(params)
             requests.push(
                 spotifyApi.getRecommendations(params)
             )
@@ -285,7 +286,12 @@ class Home extends Component {
     addToPlaylist(id) {
         let playlist = this.state.playlist;
         let recs = this.state.recommendations;
-
+        let currentIds = [];
+        for (let i = 0; i < playlist.length; i++) {
+            currentIds.push(playlist[i].id);
+            console.log(playlist[i])
+        }
+        if (currentIds.includes(id)) return;
         let track;
         recs.forEach(el => {
             if (el.id === id) track = el;
@@ -308,29 +314,36 @@ class Home extends Component {
             playlist: []
         });
     }
-
+    filter = (name, value, func, type) => {
+        let min = name === "target_tempo" ? 30 : 0;
+        let max = name === "target_tempo" ? 350 : 100;
+        let val = name === "target_tempo" ? value : value * 100;
+        return (<Filter
+            key={name}
+            value={val}
+            name={name}
+            type={type}
+            min={min}
+            max={max}
+            storeValue={func}
+        />)
+    }
     generateFilters(input, type) {
-        let filter = (name, value, func) => {
-            let min = name === "target_tempo" ? 30 : 0;
-            let max = name === "target_tempo" ? 350 : 100;
-            let val = name === "target_tempo" ? value : value * 100;
-            return (<Filter
-                key={name}
-                value={val}
-                name={name}
-                type={type}
-                min={min}
-                max={max}
-                storeValue={func}
-            />)
-        };
         let arr = [];
         for (let key in input) {
-            arr.push(filter(key, input[key], this.storeValue));
+            arr.push(this.filter(key, input[key], this.storeValue, type));
         }
         return arr;
     }
-
+    generateGenreFilters(genres) {
+        let arr = [];
+        for (let i in genres) {
+            let string = i;
+            // string = string.charAt(0).toUpperCase() + string.slice(1);
+            arr.push(this.filter(string, genres[i], this.storeValue, "genre"));
+        }
+        return arr;
+    }
     storeValue(id, val, type) {  // adjust filters
         if (type === "genre") {
             let modified = this.state.scaledGenres;
@@ -342,7 +355,14 @@ class Home extends Component {
             this.setState({ audioFeatures: modified });
         }
     }
-
+    handleChangeGenre(event) {
+        this.setState({ genreSelector: event.target.value });
+    }
+    addGenre() {
+        let scaledGenres = this.state.scaledGenres;
+        scaledGenres[this.state.genreSelector] = 0;
+        this.setState({ scaledGenres: scaledGenres });
+    }
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
@@ -355,6 +375,20 @@ class Home extends Component {
         let recs = this.createTracks(this.state.recommendations);
         let playlist = this.createTracks(this.state.playlist);
         let audioF = this.generateFilters(this.state.audioFeatures, "audio");
+        let genreFilt = this.generateGenreFilters(this.state.scaledGenres);
+        let options = [];
+        for (let key in jazzCollection) {
+            if (this.state.scaledGenres[key] == undefined) {
+                options.push(key);
+            }
+        }
+        console.log(options)
+        let genres = <>
+            <select name="genres" onChange={(event) => this.handleChangeGenre(event)}>
+                {options.map(el => <option value={el}>{el}</option>)}
+            </select>
+        </>
+
         return (
             <div>
                 <h1>Jazzify</h1>
@@ -374,10 +408,12 @@ class Home extends Component {
                             {recs}
                         </Col>
                         <Col id="filter-container" lg={2}>
-                            <Row>
-                                Filters
-                            </Row>
+                            Audio
                             {audioF}
+                            Genres
+                            {genres}
+                            <button onClick={() => this.addGenre()}>add</button>
+                            {genreFilt}
                             <button onClick={this.updateRecommendations}>Refresh</button>
                         </Col>
                         <Col id="playlist-container" lg={5}>
