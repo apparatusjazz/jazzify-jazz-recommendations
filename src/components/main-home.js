@@ -6,6 +6,7 @@ import { Container, Col, Row } from 'react-bootstrap';
 import jazzCollection from '../jazz-collection';
 import initalMappings from '../initial-map';
 import Filter from './filters';
+import AudioFilters from './audioFilters';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -16,6 +17,7 @@ class Home extends Component {
         this.state = {
             recommendations: [],
             scaledGenres: {},
+            filterGenres: {},
             playlist: [],
             genreFilters: {},
             recs: [],
@@ -211,7 +213,6 @@ class Home extends Component {
             for (let key in audioProperties) {
                 params[key] = audioProperties[key];
             }
-            console.log(params)
             requests.push(
                 spotifyApi.getRecommendations(params)
             )
@@ -228,15 +229,18 @@ class Home extends Component {
                 }
                 idx++;
             });
+            shuffle(recommendations);
             this.setState({
                 recommendations: recommendations,
-                scaledGenres: scaledGenres
+                scaledGenres: scaledGenres,
+                filterGenres: scaledGenres
             });
         })
     }
 
     updateRecommendations() {
         let genreTrackNum = this.calcTracksPerGenre(this.state.scaledGenres);
+        console.log(genreTrackNum)
         let collection = this.getArtistsFromCollection(this.state.scaledGenres, jazzCollection);
         this.getRecommendations(this.state.scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
     }
@@ -289,7 +293,6 @@ class Home extends Component {
         let currentIds = [];
         for (let i = 0; i < playlist.length; i++) {
             currentIds.push(playlist[i].id);
-            console.log(playlist[i])
         }
         if (currentIds.includes(id)) return;
         let track;
@@ -335,6 +338,22 @@ class Home extends Component {
         }
         return arr;
     }
+    generateAudioFilters(input) {
+        console.log(input)
+        let values = [];
+        for (let key in input) {
+            if (key !== "tempo") {
+                let min = input[key] * 100 - 15;
+                let max = input[key] * 100 + 15;
+                min = min >= 0 ? min : 0;
+                max = max <= 100 ? max : 100;
+                values.push([min, max]);
+            } else {
+                values.push([input[key] - 15, input[key] + 20]);
+            }
+        }
+        return <AudioFilters value={values} type="audio" storeValue={this.storeValue} />
+    }
     generateGenreFilters(genres) {
         let arr = [];
         for (let i in genres) {
@@ -346,9 +365,16 @@ class Home extends Component {
     }
     storeValue(id, val, type) {  // adjust filters
         if (type === "genre") {
-            let modified = this.state.scaledGenres;
+            let modified = { ...this.state.filterGenres };
             modified[id] = val;
-            this.setState({ scaledGenres: modified });
+            let filterGenres = { ...this.state.filterGenres };
+            filterGenres[id] = val;
+            modified = this.scaleGenreStats(modified);
+            this.setState({
+                scaledGenres: modified,
+                filterGenres: filterGenres
+            });
+            console.log("changed");
         } else {
             let modified = this.state.audioFeatures;
             modified[id] = val;
@@ -359,7 +385,7 @@ class Home extends Component {
         this.setState({ genreSelector: event.target.value });
     }
     addGenre() {
-        let scaledGenres = this.state.scaledGenres;
+        let scaledGenres = { ...this.state.scaledGenres };
         scaledGenres[this.state.genreSelector] = 0;
         this.setState({ scaledGenres: scaledGenres });
     }
@@ -375,14 +401,14 @@ class Home extends Component {
         let recs = this.createTracks(this.state.recommendations);
         let playlist = this.createTracks(this.state.playlist);
         let audioF = this.generateFilters(this.state.audioFeatures, "audio");
-        let genreFilt = this.generateGenreFilters(this.state.scaledGenres);
+        // let audioF = this.generateAudioFilters(this.state.audioFeatures);
+        let genreFilt = this.generateGenreFilters(this.state.filterGenres);
         let options = [];
         for (let key in jazzCollection) {
             if (this.state.scaledGenres[key] == undefined) {
                 options.push(key);
             }
         }
-        console.log(options)
         let genres = <>
             <select name="genres" onChange={(event) => this.handleChangeGenre(event)}>
                 {options.map(el => <option value={el}>{el}</option>)}
@@ -408,7 +434,7 @@ class Home extends Component {
                             {recs}
                         </Col>
                         <Col id="filter-container" lg={2}>
-                            Audio
+                            <div>Audio</div>
                             {audioF}
                             Genres
                             {genres}
