@@ -10,6 +10,16 @@ import AudioFilters from './audioFilters';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
+const filterNames = ["Danceability", "Energy", "Acoustics", "Instrumentalness", "Mood", "Tempo"];
+const actualNames = ["danceability", "energy", "acousticness", "instrumentalness", "valence", "tempo"];
+const filterParams = [
+    ["Undanceable", "Pumping"],
+    ["Unenergetic", "Energetic"],
+    ["Digital", "Acoustic"],
+    ["Vocal", "Instrumental"],
+    ["Melancholy", "Cheerful"],
+    ["Slow", "Fast"]
+];
 
 class Home extends Component {
     constructor(props) {
@@ -88,7 +98,15 @@ class Home extends Component {
 
         let newProps = {};
         for (let key in properties) {
-            newProps[`target_${key}`] = properties[key];
+            let val = properties[key];
+            let min = val - .15 >= 0 ? val - .15 : 0;
+            let max = val + .15 <= 1 ? val + .15 : 1;
+            if (key === "tempo") {
+                min = 30;
+                max = 300;
+            }
+            newProps[`min_${key}`] = min;
+            newProps[`max_${key}`] = max;
         }
         this.setState({
             audioFeatures: newProps
@@ -213,6 +231,7 @@ class Home extends Component {
             for (let key in audioProperties) {
                 params[key] = audioProperties[key];
             }
+            console.log(params)
             requests.push(
                 spotifyApi.getRecommendations(params)
             )
@@ -331,6 +350,21 @@ class Home extends Component {
             storeValue={func}
         />)
     }
+    audioFilter = (name, actualName, values, floor, ceil, func, type) => {
+        let param = filterParams[filterNames.indexOf(name)];
+
+        return <AudioFilters
+            key={name}
+            value={values}
+            actualName={actualName}
+            name={name}
+            type={type}
+            min={floor}
+            max={ceil}
+            param={param}
+            storeValue={func}
+        />
+    }
     generateFilters(input, type) {
         let arr = [];
         for (let key in input) {
@@ -339,20 +373,21 @@ class Home extends Component {
         return arr;
     }
     generateAudioFilters(input) {
-        console.log(input)
         let values = [];
-        for (let key in input) {
-            if (key !== "tempo") {
-                let min = input[key] * 100 - 15;
-                let max = input[key] * 100 + 15;
-                min = min >= 0 ? min : 0;
-                max = max <= 100 ? max : 100;
-                values.push([min, max]);
-            } else {
-                values.push([input[key] - 15, input[key] + 20]);
+        for (let i = 0; i < filterNames.length; i++) {
+            let min = input[`min_${actualNames[i]}`] * 100;
+            let max = input[`max_${actualNames[i]}`] * 100;
+            let floor = 0;
+            let ceil = 100;
+            if (filterNames[i] === "Tempo") {
+                min = input[`min_${actualNames[i]}`];
+                max = input[`max_${actualNames[i]}`];
+                floor = 40;
+                ceil = 300;
             }
+            values.push(this.audioFilter(filterNames[i], actualNames[i], [min, max], floor, ceil, this.storeValue, "audio"))
         }
-        return <AudioFilters value={values} type="audio" storeValue={this.storeValue} />
+        return values;
     }
     generateGenreFilters(genres) {
         let arr = [];
@@ -374,10 +409,16 @@ class Home extends Component {
                 scaledGenres: modified,
                 filterGenres: filterGenres
             });
-            console.log("changed");
-        } else {
-            let modified = this.state.audioFeatures;
-            modified[id] = val;
+        } else {    // type == "audio"
+            let modified = { ...this.state.audioFeatures };
+            console.log(id, val);
+            if (id !== "tempo") {
+                modified[`min_${id}`] = val[0] / 100;
+                modified[`max_${id}`] = val[1] / 100;
+            } else {
+                modified[`min_${id}`] = val[0];
+                modified[`max_${id}`] = val[1];
+            }
             this.setState({ audioFeatures: modified });
         }
     }
@@ -387,7 +428,12 @@ class Home extends Component {
     addGenre() {
         let scaledGenres = { ...this.state.scaledGenres };
         scaledGenres[this.state.genreSelector] = 0;
-        this.setState({ scaledGenres: scaledGenres });
+        let filterGenres = { ...this.state.filterGenres };
+        filterGenres[this.state.genreSelector] = 0;
+        this.setState({
+            scaledGenres: scaledGenres,
+            filterGenres: filterGenres
+        });
     }
     componentDidMount() {
         const params = getHashParams();
@@ -400,8 +446,8 @@ class Home extends Component {
     render() {
         let recs = this.createTracks(this.state.recommendations);
         let playlist = this.createTracks(this.state.playlist);
-        let audioF = this.generateFilters(this.state.audioFeatures, "audio");
-        // let audioF = this.generateAudioFilters(this.state.audioFeatures);
+        // let audioF = this.generateFilters(this.state.audioFeatures, "audio");
+        let audioF = this.generateAudioFilters(this.state.audioFeatures);
         let genreFilt = this.generateGenreFilters(this.state.filterGenres);
         let options = [];
         for (let key in jazzCollection) {
