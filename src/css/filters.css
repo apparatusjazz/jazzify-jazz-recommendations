@@ -1,5 +1,19 @@
+.filter-name-left {
+    text-align: left;
+    float: left;
+    font-size: 11px;
+}
+
 .filter-name {
     text-align: left;
+    float: left;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.filter-name-right {
+    text-align: right;
+    float: right;
     font-size: 11px;
 }
 
