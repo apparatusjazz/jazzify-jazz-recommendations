@@ -7,6 +7,7 @@ import jazzCollection from '../jazz-collection';
 import initalMappings from '../initial-map';
 import Filter from './filters';
 import AudioFilters from './audioFilters';
+import { Switch } from '@material-ui/core';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -28,17 +29,44 @@ class Home extends Component {
             recommendations: [],
             scaledGenres: {},
             filterGenres: {},
+            audioSwitch: true,
             playlist: [],
             genreFilters: {},
             recs: [],
             audioFeatures: {},
-            genreSelector: ""
+            genreSelector: "",
+            isPlaying: false,
+            currentlyPlaying: ""
         }
         this.addToPlaylist = this.addToPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
         this.clearPlaylist = this.clearPlaylist.bind(this);
         this.storeValue = this.storeValue.bind(this);
         this.updateRecommendations = this.updateRecommendations.bind(this);
+        this.togglePlay = this.togglePlay.bind(this);
+        this.updateCurrentlyPlaying = this.updateCurrentlyPlaying.bind(this);
+        this.toggleSwitch = this.toggleSwitch.bind(this);
+    }
+
+    toggleSwitch() {
+        this.setState({ audioSwitch: !this.state.audioSwitch });
+    }
+    togglePlay() {
+        let audio = document.getElementById(this.state.currentlyPlaying);
+        if (this.state.isPlaying) {
+            audio.pause();
+        } else audio.play();
+        this.setState({ isPlaying: !this.state.isPlaying });
+    }
+
+    updateCurrentlyPlaying(id) {
+        let audio = document.getElementById(this.state.currentlyPlaying);
+        if (audio !== null) audio.pause();
+        this.setState({
+            currentlyPlaying: id,
+            isPlaying: true
+        });
+        document.getElementById(id).play();
     }
 
     getTopArtists() {       // Return array of genre tags ex. ["indie", "soul", "funk", "sould"...]
@@ -132,7 +160,7 @@ class Home extends Component {
             if (collection[i]) {
                 shuffle(collection[i]);
                 let ids = [];
-                for (let j = 0; j < 4 && j < collection[i].length; j++) {
+                for (let j = 0; j < 5 && j < collection[i].length; j++) {
                     ids.push(collection[i][j]);
                 }
                 artists[i] = ids;
@@ -228,10 +256,11 @@ class Home extends Component {
                 // "seed_tracks": tracks[i],
                 // "seed_genres": "jazz"
             };
-            for (let key in audioProperties) {
-                params[key] = audioProperties[key];
+            if (this.state.audioSwitch) {
+                for (let key in audioProperties) {
+                    params[key] = audioProperties[key];
+                }
             }
-            console.log(params)
             requests.push(
                 spotifyApi.getRecommendations(params)
             )
@@ -259,7 +288,6 @@ class Home extends Component {
 
     updateRecommendations() {
         let genreTrackNum = this.calcTracksPerGenre(this.state.scaledGenres);
-        console.log(genreTrackNum)
         let collection = this.getArtistsFromCollection(this.state.scaledGenres, jazzCollection);
         this.getRecommendations(this.state.scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
     }
@@ -289,7 +317,7 @@ class Home extends Component {
     }
 
     createTracks(recommendations) {
-        let track = (id, album, song, artist) => {
+        let track = (id, album, song, artist, preview) => {
             return (
                 <Track
                     key={id}
@@ -298,17 +326,22 @@ class Home extends Component {
                     album={album}
                     song={song}
                     artist={artist}
+                    preview={preview}
+                    isPlaying={this.state.isPlaying}
+                    currentlyPlaying={this.state.currentlyPlaying}
+                    togglePlay={this.togglePlay}
+                    updateCurrent={this.updateCurrentlyPlaying}
                 />
             )
         }
         return recommendations.map(el =>
-            track(el.id, el.album.images[2].url, el.name, el.artists[0].name)
+            track(el.id, el.album.images[2].url, el.name, el.artists[0].name, el.preview_url)
         )
     }
 
     addToPlaylist(id) {
-        let playlist = this.state.playlist;
-        let recs = this.state.recommendations;
+        let playlist = [...this.state.playlist];
+        let recs = [...this.state.recommendations];
         let currentIds = [];
         for (let i = 0; i < playlist.length; i++) {
             currentIds.push(playlist[i].id);
@@ -411,7 +444,6 @@ class Home extends Component {
             });
         } else {    // type == "audio"
             let modified = { ...this.state.audioFeatures };
-            console.log(id, val);
             if (id !== "tempo") {
                 modified[`min_${id}`] = val[0] / 100;
                 modified[`max_${id}`] = val[1] / 100;
@@ -442,6 +474,7 @@ class Home extends Component {
             console.log("logged in successfully!")
         }
         this.getSeedTracks();
+
     }
     render() {
         let recs = this.createTracks(this.state.recommendations);
@@ -457,7 +490,7 @@ class Home extends Component {
         }
         let genres = <>
             <select name="genres" onChange={(event) => this.handleChangeGenre(event)}>
-                {options.map(el => <option value={el}>{el}</option>)}
+                {options.map(el => <option key={el} value={el}>{el}</option>)}
             </select>
         </>
 
@@ -466,20 +499,21 @@ class Home extends Component {
                 <h1>Jazzify</h1>
                 <Container fluid>
                     <Row>
-                        <Col id="recs-container" lg={5}>
+                        <Col id="recs-container" lg={5} md={5} xs={12}>
                             <Row>
-                                <Col lg={2}>
+                                <Col lg={2} md={2}>
                                 </Col>
-                                <Col lg={5}>
+                                <Col lg={5} md={5}>
                                     Song & Artist
                                 </Col>
-                                <Col lg={1}>
+                                <Col lg={1} md={1}>
                                     <button onClick={this.addAllToPlaylist} className="btn">Add</button>
                                 </Col>
                             </Row>
                             {recs}
                         </Col>
-                        <Col id="filter-container" lg={2}>
+                        <Col id="filter-container" lg={2} md={2}>
+                            <Switch checked={this.state.audioSwitch} onChange={this.toggleSwitch} />
                             <div>Audio</div>
                             {audioF}
                             Genres
@@ -488,14 +522,14 @@ class Home extends Component {
                             {genreFilt}
                             <button onClick={this.updateRecommendations}>Refresh</button>
                         </Col>
-                        <Col id="playlist-container" lg={5}>
+                        <Col id="playlist-container" lg={5} md={5}>
                             <Row>
-                                <Col lg={2}>
+                                <Col lg={2} md={2}>
                                 </Col>
-                                <Col lg={5}>
+                                <Col lg={5} md={5}>
                                     Song & Artist
                                 </Col>
-                                <Col lg={1}>
+                                <Col lg={1} md={1}>
                                     <button onClick={this.clearPlaylist} className="btn">Remove</button>
                                 </Col>
                             </Row>
