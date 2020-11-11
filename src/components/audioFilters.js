@@ -21,6 +21,7 @@ class AudioFilters extends Component {
                 />
                 <span className="filter-name-left">{this.props.param[0]}</span>
                 <span className="filter-name-right">{this.props.param[1]}</span>
+                <hr></hr>
             </>
         )
     }
