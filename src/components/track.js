@@ -5,6 +5,8 @@ import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
 import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import BlockIcon from '@material-ui/icons/Block';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 class Track extends Component {
     togglePlay() {
@@ -17,8 +19,19 @@ class Track extends Component {
     componentDidMount() {
         this.playing = false;
     }
+    addRemovefromPlaylist(inPlaylist) {
+        this.props.addRemoveFromPlaylist(this.props.id, inPlaylist);
+    }
     render() {
         let play = this.props.isPlaying && this.props.currentlyPlaying == `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon /> : <PlayArrowRoundedIcon />;
+        let inPlaylist = (id) => {
+            let playlist = this.props.playlist;
+            if (playlist.includes(this.props.id))
+                return <RemoveCircleOutlineIcon onClick={() => this.addRemovefromPlaylist(true)} />;
+            else
+                return <AddCircleOutlineIcon onClick={() => this.addRemovefromPlaylist(false)} />;
+        };
+        let addRemove = inPlaylist(this.props.id);
         return (
             <Row>
                 <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto" onClick={() => this.togglePlay()}>
@@ -39,9 +52,7 @@ class Track extends Component {
                 </Col>
 
                 <Col md="auto" lg="auto" sm="auto" xs="auto">
-                    <button className="btn" onClick={() => { this.props.addToPlaylist(this.props.id) }}>
-                        <AddRoundedIcon />
-                    </button>
+                    {addRemove}
                 </Col>
             </Row>
 
