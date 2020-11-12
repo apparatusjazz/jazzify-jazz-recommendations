@@ -8,6 +8,7 @@ import initalMappings from '../initial-map';
 import Filter from './filters';
 import AudioFilters from './audioFilters';
 import { Switch } from '@material-ui/core';
+import Navigation from './navigation';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -31,14 +32,15 @@ class Home extends Component {
             filterGenres: {},
             audioSwitch: true,
             playlist: [],
+            playlistIDs: [],
             genreFilters: {},
             recs: [],
             audioFeatures: {},
-            genreSelector: "",
+            genreSelector: "acoustic",
             isPlaying: false,
             currentlyPlaying: ""
         }
-        this.addToPlaylist = this.addToPlaylist.bind(this);
+        this.addRemoveFromPlaylist = this.addRemoveFromPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
         this.clearPlaylist = this.clearPlaylist.bind(this);
         this.storeValue = this.storeValue.bind(this);
@@ -46,6 +48,7 @@ class Home extends Component {
         this.togglePlay = this.togglePlay.bind(this);
         this.updateCurrentlyPlaying = this.updateCurrentlyPlaying.bind(this);
         this.toggleSwitch = this.toggleSwitch.bind(this);
+        this.removeGenre = this.removeGenre.bind(this);
     }
 
     toggleSwitch() {
@@ -322,7 +325,7 @@ class Home extends Component {
                 <Track
                     key={id}
                     id={id}
-                    addToPlaylist={this.addToPlaylist}
+                    addRemoveFromPlaylist={this.addRemoveFromPlaylist}
                     album={album}
                     song={song}
                     artist={artist}
@@ -331,6 +334,7 @@ class Home extends Component {
                     currentlyPlaying={this.state.currentlyPlaying}
                     togglePlay={this.togglePlay}
                     updateCurrent={this.updateCurrentlyPlaying}
+                    playlist={this.state.playlistIDs}
                 />
             )
         }
@@ -339,34 +343,50 @@ class Home extends Component {
         )
     }
 
-    addToPlaylist(id) {
+    addRemoveFromPlaylist(id, inPlaylist) {
         let playlist = [...this.state.playlist];
-        let recs = [...this.state.recommendations];
-        let currentIds = [];
-        for (let i = 0; i < playlist.length; i++) {
-            currentIds.push(playlist[i].id);
+        let playlistIds = [...this.state.playlistIDs];
+        if (!inPlaylist) playlistIds.push(id);
+        else {
+            playlistIds.splice(playlistIds.indexOf(id), 1);
         }
-        if (currentIds.includes(id)) return;
+        let recs = [...this.state.recommendations];
         let track;
-        recs.forEach(el => {
-            if (el.id === id) track = el;
-        })
-        playlist.push(track);
+        if (inPlaylist) {
+            for (let i = 0; i < playlist.length; i++) {
+                if (playlist[i].id === id) {
+                    playlist.splice(i, 1);
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i < recs.length; i++) {
+                if (recs[i].id === id) {
+                    track = recs[i];
+                    playlist.push(track);
+                    break;
+                }
+            }
+        }
         this.setState({
-            playlist: playlist
+            playlist: playlist,
+            playlistIDs: playlistIds
         })
     }
 
     addAllToPlaylist() {
         let recs = this.state.recommendations;
+        let playlistIds = this.state.recommendations.map(el => el.id);
         this.setState({
-            playlist: recs
+            playlist: recs,
+            playlistIDs: playlistIds
         });
     }
 
     clearPlaylist() {
         this.setState({
-            playlist: []
+            playlist: [],
+            playlistIDs: []
         });
     }
     filter = (name, value, func, type) => {
@@ -381,6 +401,7 @@ class Home extends Component {
             min={min}
             max={max}
             storeValue={func}
+            removeGenre={this.removeGenre}
         />)
     }
     audioFilter = (name, actualName, values, floor, ceil, func, type) => {
@@ -455,6 +476,7 @@ class Home extends Component {
         }
     }
     handleChangeGenre(event) {
+        event.preventDefault();
         this.setState({ genreSelector: event.target.value });
     }
     addGenre() {
@@ -462,6 +484,16 @@ class Home extends Component {
         scaledGenres[this.state.genreSelector] = 0;
         let filterGenres = { ...this.state.filterGenres };
         filterGenres[this.state.genreSelector] = 0;
+        this.setState({
+            scaledGenres: scaledGenres,
+            filterGenres: filterGenres
+        });
+    }
+    removeGenre(name) {
+        let scaledGenres = { ...this.state.scaledGenres };
+        delete scaledGenres[name];
+        let filterGenres = { ...this.state.filterGenres };
+        delete filterGenres[name];
         this.setState({
             scaledGenres: scaledGenres,
             filterGenres: filterGenres
@@ -496,25 +528,25 @@ class Home extends Component {
 
         return (
             <div>
-                <h1>Jazzify</h1>
+                <Navigation />
                 <Container fluid>
                     <Row>
                         <Col id="recs-container" lg={5} md={5} xs={12}>
                             <Row>
                                 <Col lg={2} md={2}>
                                 </Col>
-                                <Col lg={5} md={5}>
+                                <Col lg={6} md={6} sm={6} xs={6}>
                                     Song & Artist
                                 </Col>
-                                <Col lg={1} md={1}>
-                                    <button onClick={this.addAllToPlaylist} className="btn">Add</button>
+                                <Col md="auto" lg="auto" sm="auto" xs="auto">
+                                    <button onClick={this.addAllToPlaylist} className="btn">Add All</button>
                                 </Col>
                             </Row>
                             {recs}
                         </Col>
                         <Col id="filter-container" lg={2} md={2}>
                             <Switch checked={this.state.audioSwitch} onChange={this.toggleSwitch} />
-                            <div>Audio</div>
+                            <div>Audio Filters</div>
                             {audioF}
                             Genres
                             {genres}
@@ -526,11 +558,11 @@ class Home extends Component {
                             <Row>
                                 <Col lg={2} md={2}>
                                 </Col>
-                                <Col lg={5} md={5}>
+                                <Col lg={6} md={6} sm={6} xs={6}>
                                     Song & Artist
                                 </Col>
-                                <Col lg={1} md={1}>
-                                    <button onClick={this.clearPlaylist} className="btn">Remove</button>
+                                <Col md="auto" lg="auto" sm="auto" xs="auto">
+                                    <button onClick={this.clearPlaylist} className="btn">Remove All</button>
                                 </Col>
                             </Row>
                             {playlist}
