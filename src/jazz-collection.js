@@ -15,9 +15,11 @@ const jazzCollection = {
     ],
     "anime": [
         "3uoY3Ibj2qOK3bb47cpKs6",
-        "6cdmYp8fPQYDIU1l1Sqt8X"
+        "6cdmYp8fPQYDIU1l1Sqt8X",
+        "5MhL5v5b7XSLDIwNgLtwwQ",
+        "3U3zr5PCRa9ty74uN46iBa"
     ],
-    "bigband": [
+    "big band": [
         "1W8TbFzNS15VwsempfY12H",
         "6ra4GIOgCZQZMOaUECftGN",
         "6HQYnRM4OzToCYPpVBInuU",
@@ -52,15 +54,6 @@ const jazzCollection = {
         "01mXk9IDlVczWwZvVHAiIS",
         "3Rq3YOF9YG9YfCWD4D56RZ",
         "6mWAKV1AAFvzxQr7uztRE9"
-    ],
-    "classic": [
-        "0BqALs1lInR9TTOulUADH7",
-        "3pO5VjZ4wOHCMBXOvbMISG",
-        "6ykfXAed2KOLOMI3R0TZdz",
-        "6pVkGhtBvjj1P52yn0tNLG",
-        "4jXfFzeP66Zy67HM2mvIIF",
-        "1W8TbFzNS15VwsempfY12H",
-        "2hGh5VOeeqimQFxqXvfCUf"
     ],
     "classical": [
         "2TSuAchdgVzsAa9wDK1IeT",
@@ -167,12 +160,20 @@ const jazzCollection = {
         "5RdEgvFMoLubrYet7DNjia"
     ],
     "jazz": [
-        "68u79CqTqTgKncfDRbjDLH",
+        "0BqALs1lInR9TTOulUADH7",
+        "3pO5VjZ4wOHCMBXOvbMISG",
         "6ykfXAed2KOLOMI3R0TZdz",
+        "6pVkGhtBvjj1P52yn0tNLG",
+        "4jXfFzeP66Zy67HM2mvIIF",
         "1W8TbFzNS15VwsempfY12H",
-        "2hGh5VOeeqimQFxqXvfCUf"
+        "2hGh5VOeeqimQFxqXvfCUf",
+        "0kbYTNQb4Pb1rPbbaF0pT4",
+        "3NUsiT2JSyaWAnWaXxDzhQ",
+        "6dAtGAnHCQ1ujMUZ9Ep82k",
+        "2EsmKkHsXK0WMNGOtIhbxr",
+        "2ZvrvbQNrHKwjT7qfGFFUW",
+        "4Ww5mwS7BWYjoZTUIrMHfC"
     ],
-    "kids": [],
     "latin": [
         "1dp5YyefJVa9mkiqa3s50O",
         "3pO5VjZ4wOHCMBXOvbMISG",
@@ -273,15 +274,14 @@ const jazzCollection = {
         "5A0MH7JfEBEMySevsmauds",
         "3nYGhK3zYoTm2Yz1KduuUM"
     ],
-    "sad": [],
     "saxophone": [
         "5qOfTfMzTj2dvvpWKzIFk6",
         "0gaASCUAMqvXxGFDYaNFca",
         "60k4atxgEIMFz4DWHp0le1",
         "0tIODqvzGUoEaK26rK4pvX",
-        "2hGh5VOeeqimQFxqXvfCUf"
+        "2hGh5VOeeqimQFxqXvfCUf",
+        "4Ww5mwS7BWYjoZTUIrMHfC"
     ],
-    "ska": [],
     "smooth": [],
     "soul": [
         "65dGLGjkw3UbddUg2GKQoZ",
@@ -297,12 +297,16 @@ const jazzCollection = {
     "swing": [
         "2PjgZkwAEk7UTin4jP6HLP"
     ],
-    "trap": [
-        "2q37Nw8NND2z1T1KU5XVfn"
-    ],
     "trumpet": [
         "4ai53dgSBGhQwcFtGyY1bF",
-        "2q37Nw8NND2z1T1KU5XVfn"
+        "2q37Nw8NND2z1T1KU5XVfn",
+        "0kbYTNQb4Pb1rPbbaF0pT4"
+    ],
+    "video game": [
+        "62GoYifV4njTdvS8lD2yYT",
+        "7pTTIgq3BHTT5N1fMayX0U",
+        "03WZwOtOcB9xhx9yBNtoSe",
+        "2jR6Lr47O21Iq7l5Bs2mig"
     ],
     "vocal": [
         "3gi1r8g39AZGZO7iwEw4lh",
