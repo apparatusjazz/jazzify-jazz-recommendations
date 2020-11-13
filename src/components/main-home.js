@@ -9,6 +9,9 @@ import Filter from './filters';
 import AudioFilters from './audioFilters';
 import { Switch } from '@material-ui/core';
 import Navigation from './navigation';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import '../css/main-home.css';
+import AddIcon from '@material-ui/icons/Add';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -86,6 +89,7 @@ class Home extends Component {
             });
             let a = this.mapInitialGenres(genres, initalMappings);
             let scaledGenres = this.scaleGenreStats(a);
+            return scaledGenres;
         })
 
     }
@@ -225,7 +229,7 @@ class Home extends Component {
                 for (let i in artistCollection) {
                     tracks[i] = [];
                     for (let j = 0; j < artistCollection[i].length; j++) {
-                        requests.push(spotifyApi.getArtistTopTracks(artistCollection[i][j], "US"));
+                        requests.push(spotifyApi.getArtistTopTracks(artistCollection[i][j], this.country));
                     }
                 }
                 Promise.all(requests).then(data => {
@@ -250,11 +254,12 @@ class Home extends Component {
     getRecommendations(scaledGenres, artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [], trackIds = [];
         let requests = [];
+        console.log(artists)
 
         for (let i in artists) {
             let params = {
                 "limit": 30,
-                "market": "US",
+                "market": this.country,
                 "seed_artists": artists[i],
                 // "seed_tracks": tracks[i],
                 // "seed_genres": "jazz"
@@ -505,25 +510,27 @@ class Home extends Component {
             spotifyApi.setAccessToken(params.access_token);
             console.log("logged in successfully!")
         }
-        this.getSeedTracks();
-
+        spotifyApi.getMe().then(data => {
+            this.country = data.country;
+            this.getSeedTracks();
+        })
     }
     render() {
         let recs = this.createTracks(this.state.recommendations);
         let playlist = this.createTracks(this.state.playlist);
-        // let audioF = this.generateFilters(this.state.audioFeatures, "audio");
         let audioF = this.generateAudioFilters(this.state.audioFeatures);
         let genreFilt = this.generateGenreFilters(this.state.filterGenres);
         let options = [];
         for (let key in jazzCollection) {
-            if (this.state.scaledGenres[key] == undefined) {
+            if (this.state.scaledGenres[key] === undefined) {
                 options.push(key);
             }
         }
         let genres = <>
-            <select name="genres" onChange={(event) => this.handleChangeGenre(event)}>
+            <select className="selector" name="genres" onChange={(event) => this.handleChangeGenre(event)}>
                 {options.map(el => <option key={el} value={el}>{el}</option>)}
             </select>
+            <AddIcon onClick={() => this.addGenre()} />
         </>
 
         return (
@@ -533,7 +540,7 @@ class Home extends Component {
                     <Row>
                         <Col id="recs-container" lg={5} md={5} xs={12}>
                             <Row>
-                                <Col lg={2} md={2}>
+                                <Col >
                                 </Col>
                                 <Col lg={6} md={6} sm={6} xs={6}>
                                     Song & Artist
@@ -545,14 +552,22 @@ class Home extends Component {
                             {recs}
                         </Col>
                         <Col id="filter-container" lg={2} md={2}>
-                            <Switch checked={this.state.audioSwitch} onChange={this.toggleSwitch} />
-                            <div>Audio Filters</div>
-                            {audioF}
-                            Genres
-                            {genres}
-                            <button onClick={() => this.addGenre()}>add</button>
-                            {genreFilt}
-                            <button onClick={this.updateRecommendations}>Refresh</button>
+                            <div className="audio-filter-container">
+                                <div>
+                                    Audio Filters
+                                <Switch checked={this.state.audioSwitch} size="small" onChange={this.toggleSwitch} />
+                                </div>
+                                {audioF}
+                            </div>
+                            <div className="genre-filter-container">
+                                Genres
+                                <div>{genres}</div>
+                                {genreFilt}
+                                <button className="refresh-btn btn" onClick={this.updateRecommendations}>
+                                    <RefreshIcon />
+                                    Refresh
+                                    </button>
+                            </div>
                         </Col>
                         <Col id="playlist-container" lg={5} md={5}>
                             <Row>
@@ -571,6 +586,7 @@ class Home extends Component {
                 </Container>
                 <div>
                     <a id="login-btn" href={"http://localhost:8888/login"}>Login</a>
+                    <a target="_blank" rel="noopener noreferrer" id="logout-btn" href={"https://www.spotify.com/logout"}>Logout</a>
                 </div>
             </div>
         )

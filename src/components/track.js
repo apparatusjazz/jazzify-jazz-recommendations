@@ -3,7 +3,6 @@ import { Row, Col } from 'react-bootstrap';
 import '../css/track.css';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRounded';
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
 import BlockIcon from '@material-ui/icons/Block';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -23,7 +22,7 @@ class Track extends Component {
         this.props.addRemoveFromPlaylist(this.props.id, inPlaylist);
     }
     render() {
-        let play = this.props.isPlaying && this.props.currentlyPlaying == `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon /> : <PlayArrowRoundedIcon />;
+        let play = this.props.isPlaying && this.props.currentlyPlaying === `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon /> : <PlayArrowRoundedIcon />;
         let inPlaylist = (id) => {
             let playlist = this.props.playlist;
             if (playlist.includes(this.props.id))
@@ -42,7 +41,7 @@ class Track extends Component {
                     <img className="album-art" src={this.props.album} alt="Album Cover" />
                 </Col>
 
-                <Col lg={6} md={6} sm={6} xs={6}>
+                <Col >
                     <Row className="song text">
                         {this.props.song}
                     </Row>

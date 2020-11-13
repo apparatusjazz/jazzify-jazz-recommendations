@@ -20,3 +20,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.play-container {
+    padding-right: 5px;
+    padding-left: 10px;
+    padding-top: 10px;
+}

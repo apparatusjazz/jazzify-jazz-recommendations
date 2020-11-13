@@ -1,0 +1,37 @@
+.btn {
+    border-radius: 5px;
+    background-color: unset;
+    color: white;
+}
+
+body {
+    background-color: rgb(59, 59, 59);
+}
+
+div, p {
+    color: white;
+}
+
+.selector {
+    width: 100px;
+    border-radius: 3px;
+    color: white;
+    background-color: rgb(59, 59, 59);
+}
+
+
+@media only screen and (min-width: 768px) {
+    #recs-container {
+        padding-left: 60px;
+    }
+
+    #playlist-container {
+        padding-right: 60px;
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    #recs-container, #playlist-container {
+        padding: 20px 60px 20px 60px;
+    }
+}
