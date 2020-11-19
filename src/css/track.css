@@ -26,3 +26,21 @@
     padding-left: 10px;
     padding-top: 10px;
 }
+
+.icon {
+    border-radius: 100%;
+}
+.icon:hover {
+    background-color: rgb(43, 43, 43);
+}
+.add {
+    color: rgb(154, 212, 154);
+}
+
+.remove {
+    color: rgb(231, 162, 162);
+}
+
+.play, .pause, .block {
+    color: rgb(209, 209, 209);
+}
