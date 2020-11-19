@@ -25,6 +25,10 @@
     float: right;
     width: 18px !important;
     height: 18px !important;
+    border-radius: 100%;
+}
+.remove-genre:hover {
+    background-color: rgb(59, 59, 59);
 }
 
 .audio-filter-container, .genre-filter-container {
@@ -34,10 +38,27 @@
     margin-top: 10px;
 }
 
+.audio-filter-container-inactive {
+    border-radius: 10px;
+    background: rgb(168, 168, 168);
+    padding: 10px;
+    margin-top: 10px;
+}
+
 #filter-container {
-    padding: 0;
+    padding: 20px 0 20px;
 }
 
 .MuiSlider-root {
-    color: white !important;
+    color: rgb(209, 209, 209) !important;
+}
+
+hr {
+    background-color: rgb(95, 95, 95);
+}
+
+@media only screen and (max-width: 768px) {
+    #filter-container {
+        padding: 5% 5% 5% 5%;
+    }
 }
