@@ -12,6 +12,7 @@ import Navigation from './navigation';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import '../css/main-home.css';
 import AddIcon from '@material-ui/icons/Add';
+import LoginPage from './login-page';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -33,7 +34,7 @@ class Home extends Component {
             recommendations: [],
             scaledGenres: {},
             filterGenres: {},
-            audioSwitch: true,
+            audioSwitch: false,
             playlist: [],
             playlistIDs: [],
             genreFilters: {},
@@ -41,7 +42,8 @@ class Home extends Component {
             audioFeatures: {},
             genreSelector: "acoustic",
             isPlaying: false,
-            currentlyPlaying: ""
+            currentlyPlaying: "",
+            loggedIn: false
         }
         this.addRemoveFromPlaylist = this.addRemoveFromPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
@@ -86,7 +88,7 @@ class Home extends Component {
                         genres.push(splitWords[j]);
                     }
                 }
-            });
+            }).catch(err => console.log(err))
             let a = this.mapInitialGenres(genres, initalMappings);
             let scaledGenres = this.scaleGenreStats(a);
             return scaledGenres;
@@ -111,13 +113,13 @@ class Home extends Component {
                         }
                     }
                     count++;
-                });
+                }).catch(err => console.log(err))
                 for (let i in properties) {     // Get averages of audio features
                     properties[i] = properties[i] / count;
                 }
                 properties = this.processAnalysis(properties);
                 return properties;
-            })
+            }).catch(err => console.log(err))
         )
 
     }
@@ -134,8 +136,8 @@ class Home extends Component {
         let newProps = {};
         for (let key in properties) {
             let val = properties[key];
-            let min = val - .15 >= 0 ? val - .15 : 0;
-            let max = val + .15 <= 1 ? val + .15 : 1;
+            let min = val - .2 >= 0 ? val - .2 : 0;
+            let max = val + .2 <= 1 ? val + .2 : 1;
             if (key === "tempo") {
                 min = 30;
                 max = 300;
@@ -186,15 +188,15 @@ class Home extends Component {
         let scaledGenres, artistCollection, audioProperties, ids = [];
 
         spotifyApi.getMyTopArtists({ "time_range": "medium_term" }).then(res => {
-            let genres = {};
+            let genres = [];
             res.items.forEach(idx => {
                 for (let i in idx.genres) {
                     let splitWords = idx.genres[i].split(" ");
                     for (let j in splitWords) {
-                        genres[i] = splitWords[j];
+                        genres.push(splitWords[j]);
                     }
                 }
-            });
+            })
             let a = this.mapInitialGenres(genres, initalMappings);
             scaledGenres = this.scaleGenreStats(a);
             artistCollection = this.getArtistsFromCollection(scaledGenres, jazzCollection);
@@ -254,7 +256,13 @@ class Home extends Component {
     getRecommendations(scaledGenres, artists, tracks, audioProperties, genreTrackNum) {
         let recommendations = [], trackIds = [];
         let requests = [];
-        console.log(artists)
+        let idx = 0;
+        for (let i in scaledGenres) {       // delete genres that have the track count = 0
+            if (genreTrackNum[idx] === 0) {
+                delete scaledGenres[i];
+            }
+            idx++;
+        }
 
         for (let i in artists) {
             let params = {
@@ -291,13 +299,14 @@ class Home extends Component {
                 scaledGenres: scaledGenres,
                 filterGenres: scaledGenres
             });
-        })
+        }).catch((err) => console.log("There was an error...", err))
     }
 
     updateRecommendations() {
-        let genreTrackNum = this.calcTracksPerGenre(this.state.scaledGenres);
-        let collection = this.getArtistsFromCollection(this.state.scaledGenres, jazzCollection);
-        this.getRecommendations(this.state.scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
+        let scaledGenres = this.scaleGenreStats(this.state.scaledGenres);
+        let genreTrackNum = this.calcTracksPerGenre(scaledGenres);
+        let collection = this.getArtistsFromCollection(scaledGenres, jazzCollection);
+        this.getRecommendations(scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
     }
 
     calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
@@ -510,10 +519,11 @@ class Home extends Component {
             spotifyApi.setAccessToken(params.access_token);
             console.log("logged in successfully!")
         }
+        spotifyApi.getMe().then(res => this.setState({ loggedIn: true })).catch(err => this.setState({ loggedIn: false }));
         spotifyApi.getMe().then(data => {
             this.country = data.country;
             this.getSeedTracks();
-        })
+        }).catch(err => console.log(err))
     }
     render() {
         let recs = this.createTracks(this.state.recommendations);
@@ -533,26 +543,21 @@ class Home extends Component {
             <AddIcon onClick={() => this.addGenre()} />
         </>
 
+        const audioFilterClass = this.state.audioSwitch ? 'audio-filter-container' : 'audio-filter-container-inactive';
         return (
             <div>
                 <Navigation />
+                {this.state.loggedIn ? '' : <LoginPage />}
                 <Container fluid>
                     <Row>
                         <Col id="recs-container" lg={5} md={5} xs={12}>
-                            <Row>
-                                <Col >
-                                </Col>
-                                <Col lg={6} md={6} sm={6} xs={6}>
-                                    Song & Artist
-                                </Col>
-                                <Col md="auto" lg="auto" sm="auto" xs="auto">
-                                    <button onClick={this.addAllToPlaylist} className="btn">Add All</button>
-                                </Col>
+                            <Row className="playlist-row">
+                                <button onClick={this.addAllToPlaylist} className="btn">Add All</button>
                             </Row>
                             {recs}
                         </Col>
                         <Col id="filter-container" lg={2} md={2}>
-                            <div className="audio-filter-container">
+                            <div className={audioFilterClass}>
                                 <div>
                                     Audio Filters
                                 <Switch checked={this.state.audioSwitch} size="small" onChange={this.toggleSwitch} />
@@ -570,24 +575,13 @@ class Home extends Component {
                             </div>
                         </Col>
                         <Col id="playlist-container" lg={5} md={5}>
-                            <Row>
-                                <Col lg={2} md={2}>
-                                </Col>
-                                <Col lg={6} md={6} sm={6} xs={6}>
-                                    Song & Artist
-                                </Col>
-                                <Col md="auto" lg="auto" sm="auto" xs="auto">
-                                    <button onClick={this.clearPlaylist} className="btn">Remove All</button>
-                                </Col>
+                            <Row className="playlist-row">
+                                {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn">Remove All</button> : ""}
                             </Row>
                             {playlist}
                         </Col>
                     </Row>
                 </Container>
-                <div>
-                    <a id="login-btn" href={"http://localhost:8888/login"}>Login</a>
-                    <a target="_blank" rel="noopener noreferrer" id="logout-btn" href={"https://www.spotify.com/logout"}>Logout</a>
-                </div>
             </div>
         )
     }
