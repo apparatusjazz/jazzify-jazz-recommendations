@@ -54,10 +54,25 @@ class Home extends Component {
         this.updateCurrentlyPlaying = this.updateCurrentlyPlaying.bind(this);
         this.toggleSwitch = this.toggleSwitch.bind(this);
         this.removeGenre = this.removeGenre.bind(this);
+        this.removeAllGenres = this.removeAllGenres.bind(this);
+        this.resetFilter = this.resetFilter.bind(this);
     }
 
     toggleSwitch() {
         this.setState({ audioSwitch: !this.state.audioSwitch });
+    }
+
+    resetFilter(id) {
+        console.log("reset filter", id)
+        let modified = { ...this.state.audioFeatures };
+        if (id !== "tempo") {
+            modified[`min_${id}`] = 0;
+            modified[`max_${id}`] = 1;
+        } else {
+            modified[`min_${id}`] = 40;
+            modified[`max_${id}`] = 300;
+        }
+        this.setState({ audioFeatures: modified });
     }
     togglePlay() {
         let audio = document.getElementById(this.state.currentlyPlaying);
@@ -257,6 +272,7 @@ class Home extends Component {
         let recommendations = [], trackIds = [];
         let requests = [];
         let idx = 0;
+        console.log(artists, scaledGenres)
         for (let i in scaledGenres) {       // delete genres that have the track count = 0
             if (genreTrackNum[idx] === 0) {
                 delete scaledGenres[i];
@@ -331,6 +347,14 @@ class Home extends Component {
             }
         }
         return genreList;
+    }
+
+    checkCollection() {
+        for (let i in jazzCollection) {
+            jazzCollection[i].forEach(artist => {
+                spotifyApi.getArtist(artist).then(res => { }).catch(err => console.log("not available", artist));
+            })
+        }
     }
 
     createTracks(recommendations) {
@@ -418,7 +442,7 @@ class Home extends Component {
             removeGenre={this.removeGenre}
         />)
     }
-    audioFilter = (name, actualName, values, floor, ceil, func, type) => {
+    audioFilter = (name, actualName, values, floor, ceil, func, type, reset) => {
         let param = filterParams[filterNames.indexOf(name)];
 
         return <AudioFilters
@@ -431,6 +455,7 @@ class Home extends Component {
             max={ceil}
             param={param}
             storeValue={func}
+            reset={reset}
         />
     }
     generateFilters(input, type) {
@@ -453,7 +478,7 @@ class Home extends Component {
                 floor = 40;
                 ceil = 300;
             }
-            values.push(this.audioFilter(filterNames[i], actualNames[i], [min, max], floor, ceil, this.storeValue, "audio"))
+            values.push(this.audioFilter(filterNames[i], actualNames[i], [min, max], floor, ceil, this.storeValue, "audio", this.resetFilter))
         }
         return values;
     }
@@ -513,6 +538,12 @@ class Home extends Component {
             filterGenres: filterGenres
         });
     }
+    removeAllGenres() {
+        this.setState({
+            scaledGenres: [],
+            filterGenres: []
+        });
+    }
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
@@ -524,6 +555,11 @@ class Home extends Component {
             this.country = data.country;
             this.getSeedTracks();
         }).catch(err => console.log(err))
+
+        // jazzCollection["guitar"].forEach(artist => {
+        //     spotifyApi.getArtist(artist).then(res => console.log(res.name, artist))
+        // })
+        // this.checkCollection();
     }
     render() {
         let recs = this.createTracks(this.state.recommendations);
@@ -566,6 +602,7 @@ class Home extends Component {
                             </div>
                             <div className="genre-filter-container">
                                 Genres
+                                <button className="btn" onClick={this.removeAllGenres}>Clear All</button>
                                 <div>{genres}</div>
                                 {genreFilt}
                                 <button className="refresh-btn btn" onClick={this.updateRecommendations}>
