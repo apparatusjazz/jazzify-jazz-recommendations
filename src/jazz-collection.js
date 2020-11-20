@@ -1,8 +1,5 @@
 const jazzCollection = {
 
-    "acoustic": [
-        "2TSuAchdgVzsAa9wDK1IeT"
-    ],
     "afro": [
         "5LHgdJhFO2hT2gu877UPKV",
         "1gMQhZV6otY4KEVN3yujDJ"
@@ -15,9 +12,10 @@ const jazzCollection = {
     ],
     "anime": [
         "3uoY3Ibj2qOK3bb47cpKs6",
-        "6cdmYp8fPQYDIU1l1Sqt8X",
         "5MhL5v5b7XSLDIwNgLtwwQ",
-        "3U3zr5PCRa9ty74uN46iBa"
+        "3U3zr5PCRa9ty74uN46iBa",
+        "3yKoHgjtyenCOIRaD2Gghu",
+        "0lrEYsRTl6UNtTagWmJAqZ"
     ],
     "big band": [
         "1W8TbFzNS15VwsempfY12H",
@@ -34,15 +32,13 @@ const jazzCollection = {
         "5Zmur9D9gpr6tXyDrpnbOe"
     ],
     "blues": [
+        "1YwfENKEZrowcmtR1nALZn",
         "2TSuAchdgVzsAa9wDK1IeT",
         "1oTIG44ppYw0nUBqFvZ5Q5",
-        "0uyK6faAhm4CYcf1OhP38V"
-    ],
-    "bop": [
-        "68u79CqTqTgKncfDRbjDLH",
-        "6ykfXAed2KOLOMI3R0TZdz",
-        "1W8TbFzNS15VwsempfY12H",
-        "2hGh5VOeeqimQFxqXvfCUf"
+        "0uyK6faAhm4CYcf1OhP38V",
+        "49zXTngyUTielHTbbH5YKs",
+        "7DeuppKQdCVhuWrzzCBBpc",
+        "0ldU0QJm31y0d6f57R1G2A"
     ],
     "bossanova": [
         "3pO5VjZ4wOHCMBXOvbMISG",
@@ -53,7 +49,9 @@ const jazzCollection = {
         "497rp5TEzJffeBnUT0BeE1",
         "01mXk9IDlVczWwZvVHAiIS",
         "3Rq3YOF9YG9YfCWD4D56RZ",
-        "6mWAKV1AAFvzxQr7uztRE9"
+        "6mWAKV1AAFvzxQr7uztRE9",
+        "0HoPjo2Li9pqBLkR50p63C",
+        "3yKoHgjtyenCOIRaD2Gghu"
     ],
     "classical": [
         "2TSuAchdgVzsAa9wDK1IeT",
@@ -68,10 +66,6 @@ const jazzCollection = {
         "6BXA5FDonefcAe2hg4T7K5",
         "4dZrt8Ong5t7YYpvbfp0RU"
     ],
-    "dance": [
-        "2ev6Cd0yJVCcpf2zezEQ8Z",
-        "3TMLgJUsDIxI4CShGh8vYM"
-    ],
     "drum and bass": [
         "19f2JXwlRU26376TCKmp6L",
         "497rp5TEzJffeBnUT0BeE1",
@@ -84,19 +78,26 @@ const jazzCollection = {
         "3TMLgJUsDIxI4CShGh8vYM",
         "5mUcc8OOP4RuzrupeGYwW5",
         "0Z5FMozvx15nUSUA6a9kkU",
-        "6mWAKV1AAFvzxQr7uztRE9"
+        "6mWAKV1AAFvzxQr7uztRE9",
+        "2XPUDzn2nGbKcT3i90dIUE",
+        "7jDA84G7dkwJAGstQhFbhd",
+        "1uvnDqn7UvVy6orSq1E2YF"
     ],
     "experimental": [
         "29XOeO6KIWxGthejQqn793",
         "0Z5FMozvx15nUSUA6a9kkU",
         "0tIODqvzGUoEaK26rK4pvX",
-        "3poNEhEAAwqWGnLaQNE0Fs"
+        "3poNEhEAAwqWGnLaQNE0Fs",
+        "0rS1Y2DkDJhLiaR0MyJyCg",
+        "3UXq4fckDmcPmleixlrl6i",
+        "1uvnDqn7UvVy6orSq1E2YF"
     ],
     "folk": [
         "2TSuAchdgVzsAa9wDK1IeT",
         "5Zmur9D9gpr6tXyDrpnbOe",
         "6BXA5FDonefcAe2hg4T7K5",
-        "0D3h8NZqNp7BN97JwtV6eW"
+        "0D3h8NZqNp7BN97JwtV6eW",
+        "2P1puQXmG48EVLBrHbum1J"
     ],
     "funk": [
         "44PWvdyxyL5P8eXZTP2HDI",
@@ -105,24 +106,27 @@ const jazzCollection = {
         "4YLUMAgNyttwx4hUHgtBtR",
         "7ENzCHnmJUr20nUjoZ0zZ1",
         "0uyK6faAhm4CYcf1OhP38V",
-        "5COMNbVWoe1Kb5UTFAaUwF"
+        "5COMNbVWoe1Kb5UTFAaUwF",
+        "0QWrMNukfcVOmgEU0FEDyD"
     ],
     "fusion": [
         "5CK3a77IzCSHjNqzRcbhuG",
         "1V4jsLjkic1Mxvdke86Qth",
         "5Zmur9D9gpr6tXyDrpnbOe",
-        "6ra4GIOgCZQZMOaUECftGN"
+        "6ra4GIOgCZQZMOaUECftGN",
+        "7DeuppKQdCVhuWrzzCBBpc"
     ],
     "guitar": [
         "68u79CqTqTgKncfDRbjDLH",
         "2TSuAchdgVzsAa9wDK1IeT",
-        "5CK3a77IzCSHjNqzRcbhuG",
-        "1V4jsLjkic1Mxvdke86Qth",
         "6pVkGhtBvjj1P52yn0tNLG",
         "2CH9bD5RtnDcm9O23JByN7",
         "1oTIG44ppYw0nUBqFvZ5Q5",
         "14RXohtx6NiBGFTW8IdmAK",
-        "5YfW24O2P3ljTAZjBRr4jy"
+        "5YfW24O2P3ljTAZjBRr4jy",
+        "03YhcM6fxypfwckPCQV8pQ",
+        "253GMpCNwx1TJtASNAeDoP",
+        "6dAtGAnHCQ1ujMUZ9Ep82k"
     ],
     "happy": [
         "6RuS4udHwx3C9ysk4KXtNw"
@@ -142,10 +146,14 @@ const jazzCollection = {
         "29XOeO6KIWxGthejQqn793",
         "710FHFQeXKC6dZGCxt7kQh",
         "01mXk9IDlVczWwZvVHAiIS",
-        "3Rq3YOF9YG9YfCWD4D56RZ"
+        "3Rq3YOF9YG9YfCWD4D56RZ",
+        "2XPUDzn2nGbKcT3i90dIUE"
     ],
     "indie": [
-        "60k4atxgEIMFz4DWHp0le1"
+        "60k4atxgEIMFz4DWHp0le1",
+        "0nXwIc4NAbu2K881ealRDu",
+        "0rS1Y2DkDJhLiaR0MyJyCg",
+        "7jDA84G7dkwJAGstQhFbhd"
     ],
     "japanese": [
         "3gi1r8g39AZGZO7iwEw4lh",
@@ -157,7 +165,9 @@ const jazzCollection = {
         "5vLyvkGLk9d9hp9LRQ8RqD",
         "5COMNbVWoe1Kb5UTFAaUwF",
         "0rpKM0MniNkXM1SLSglYUZ",
-        "5RdEgvFMoLubrYet7DNjia"
+        "5RdEgvFMoLubrYet7DNjia",
+        "0lrEYsRTl6UNtTagWmJAqZ",
+        "7DeuppKQdCVhuWrzzCBBpc"
     ],
     "jazz": [
         "0BqALs1lInR9TTOulUADH7",
@@ -172,7 +182,20 @@ const jazzCollection = {
         "6dAtGAnHCQ1ujMUZ9Ep82k",
         "2EsmKkHsXK0WMNGOtIhbxr",
         "2ZvrvbQNrHKwjT7qfGFFUW",
-        "4Ww5mwS7BWYjoZTUIrMHfC"
+        "4Ww5mwS7BWYjoZTUIrMHfC",
+        "03YhcM6fxypfwckPCQV8pQ",
+        "0F3Aew9DSd6fb6192K1K0Y",
+        "0JM134st8VY7Ld9T2wQiH0",
+        "0Vz0vgVrclNJlHBLrgjklY",
+        "0fTHKjepK5HWOrb2rkS5Em",
+        "0nXwIc4NAbu2K881ealRDu",
+        "1HJHwWck1EY096ea2iPAHO",
+        "38C3okxv3fyyOIQUVPCdGX",
+        "3rxeQlsv0Sc2nyYaZ5W71T",
+        "5olDKSsFhhmwh8UCWwKtpq",
+        "0ldU0QJm31y0d6f57R1G2A",
+        "49zXTngyUTielHTbbH5YKs",
+        "253GMpCNwx1TJtASNAeDoP"
     ],
     "latin": [
         "1dp5YyefJVa9mkiqa3s50O",
@@ -182,9 +205,11 @@ const jazzCollection = {
         "0MGQZNEMaEICyku3cSDrnJ",
         "77ZUbcdoU5KCPHNUl8bgQy",
         "0yFvXd36g5sNKYDi0Kkvl8",
-        "6sMYDCMbXwodgyR2vejSEb",
+        "7wIvJyLDNfkgdKFVxJl5tL",
         "5YfW24O2P3ljTAZjBRr4jy",
-        "1gMQhZV6otY4KEVN3yujDJ"
+        "1gMQhZV6otY4KEVN3yujDJ",
+        "7jDk9ohezXq697Zz5X2KPI",
+        "3XOVABzceOUTbR3iEz0ImO"
 
     ],
     "metal": [
@@ -205,13 +230,20 @@ const jazzCollection = {
         "2vI9KFm0fwSfPrpEgOeIbq",
         "6HQYnRM4OzToCYPpVBInuU",
         "2q37Nw8NND2z1T1KU5XVfn",
-        "6BXA5FDonefcAe2hg4T7K5"
+        "6BXA5FDonefcAe2hg4T7K5",
+        "0Vz0vgVrclNJlHBLrgjklY",
+        "0HoPjo2Li9pqBLkR50p63C",
+        "0nXwIc4NAbu2K881ealRDu",
+        "253GMpCNwx1TJtASNAeDoP",
+        "0QWrMNukfcVOmgEU0FEDyD"
     ],
     "old": [
         "6htazaFMy8zs0f3sMtM2Pt",
         "2PjgZkwAEk7UTin4jP6HLP",
         "0EodhzA6yW1bIdD5B4tcmJ",
-        "1pBuKaLHJlIlqYxQQaflve"
+        "1pBuKaLHJlIlqYxQQaflve",
+        "05E3NBxNMdnrPtxF9oraJm",
+        "0JM134st8VY7Ld9T2wQiH0"
     ],
     "piano": [
         "22KzEvCtrTGf9l6k7zFcdv",
@@ -224,7 +256,11 @@ const jazzCollection = {
         "0FcNSKwWZJb98ry9M2qEII",
         "0D3h8NZqNp7BN97JwtV6eW",
         "6mWAKV1AAFvzxQr7uztRE9",
-        "7sEmXHrnEnX7PScoJAvSvo"
+        "7sEmXHrnEnX7PScoJAvSvo",
+        "0F3Aew9DSd6fb6192K1K0Y",
+        "5olDKSsFhhmwh8UCWwKtpq",
+        "0ldU0QJm31y0d6f57R1G2A",
+        "7DeuppKQdCVhuWrzzCBBpc"
     ],
     "pop": [
         "1GxkXlMwML1oSg5eLPiAz3",
@@ -233,11 +269,11 @@ const jazzCollection = {
         "6MVeEwYSJUvwwYfUVPeZ6Y",
         "0JvUFDnuWPbuyRa6ptVkLk",
         "6niRXUE5IPchgYvYD8Ck00",
-        "2VU83NBXbWqEuBZVI52YtL"
-    ],
-    "post bop": [
-        "1P6Llrp12ldpVbyC8gCHBz",
-        "2vI9KFm0fwSfPrpEgOeIbq"
+        "05E3NBxNMdnrPtxF9oraJm",
+        "2lolQgalUvZDfp5vvVtTYV",
+        "1bgyxtWjZwA5PQlDsvs9b8",
+        "3rxeQlsv0Sc2nyYaZ5W71T",
+        "0QWrMNukfcVOmgEU0FEDyD"
     ],
     "reggae": [
         "30V1rKijENF5MFcGidInfh",
@@ -255,7 +291,8 @@ const jazzCollection = {
         "3Rq3YOF9YG9YfCWD4D56RZ",
         "5BRAUN0yN8557PLRZIr02W",
         "5HNkGissAKlCv88sus7rVO",
-        "3CJEpzlVzfyLTpKJlpKdHw"
+        "3CJEpzlVzfyLTpKJlpKdHw",
+        "7qzzcFzliEAHMlDA9qaRVf"
     ],
     "rnb": [
         "60k4atxgEIMFz4DWHp0le1",
@@ -272,7 +309,9 @@ const jazzCollection = {
         "6RuS4udHwx3C9ysk4KXtNw",
         "0rpKM0MniNkXM1SLSglYUZ",
         "5A0MH7JfEBEMySevsmauds",
-        "3nYGhK3zYoTm2Yz1KduuUM"
+        "3nYGhK3zYoTm2Yz1KduuUM",
+        "0nXwIc4NAbu2K881ealRDu",
+        "253GMpCNwx1TJtASNAeDoP"
     ],
     "saxophone": [
         "5qOfTfMzTj2dvvpWKzIFk6",
@@ -280,27 +319,41 @@ const jazzCollection = {
         "60k4atxgEIMFz4DWHp0le1",
         "0tIODqvzGUoEaK26rK4pvX",
         "2hGh5VOeeqimQFxqXvfCUf",
-        "4Ww5mwS7BWYjoZTUIrMHfC"
+        "4Ww5mwS7BWYjoZTUIrMHfC",
+        "05E3NBxNMdnrPtxF9oraJm",
+        "0Vz0vgVrclNJlHBLrgjklY"
     ],
-    "smooth": [],
+    "smooth": [
+        "32WK2OuP2PG4r7sH7bUfN9",
+        "5lFAGKb5mvPQX9on6lKC88",
+        "4ThkLup6LmqCUuHuG434zZ",
+        "7xIWaSpdL5oIEZw5QCZ84Y",
+        "6NS4Qt4ISw27NC9tIN9jgg",
+        "2CqMN6Wc7xALKwcrV2vqEW",
+        "79kOOyVKcrCOKDnzcDHsia"
+    ],
     "soul": [
         "65dGLGjkw3UbddUg2GKQoZ",
         "60k4atxgEIMFz4DWHp0le1",
         "6HQYnRM4OzToCYPpVBInuU",
         "0FcNSKwWZJb98ry9M2qEII",
         "710FHFQeXKC6dZGCxt7kQh",
-        "0uyK6faAhm4CYcf1OhP38V"
+        "0uyK6faAhm4CYcf1OhP38V",
+        "49zXTngyUTielHTbbH5YKs",
+        "6dAtGAnHCQ1ujMUZ9Ep82k"
     ],
     "spanish": [
         "1dp5YyefJVa9mkiqa3s50O"
     ],
-    "swing": [
-        "2PjgZkwAEk7UTin4jP6HLP"
-    ],
     "trumpet": [
         "4ai53dgSBGhQwcFtGyY1bF",
         "2q37Nw8NND2z1T1KU5XVfn",
-        "0kbYTNQb4Pb1rPbbaF0pT4"
+        "0kbYTNQb4Pb1rPbbaF0pT4",
+        "0fTHKjepK5HWOrb2rkS5Em",
+        "1HJHwWck1EY096ea2iPAHO",
+        "38C3okxv3fyyOIQUVPCdGX",
+        "3rxeQlsv0Sc2nyYaZ5W71T",
+        "49zXTngyUTielHTbbH5YKs"
     ],
     "video game": [
         "62GoYifV4njTdvS8lD2yYT",
@@ -314,7 +367,11 @@ const jazzCollection = {
         "6htazaFMy8zs0f3sMtM2Pt",
         "60k4atxgEIMFz4DWHp0le1",
         "0EodhzA6yW1bIdD5B4tcmJ",
-        "1GxkXlMwML1oSg5eLPiAz3"
+        "1GxkXlMwML1oSg5eLPiAz3",
+        "1UhC1mCcd9SFXLibHhMX61",
+        "2lolQgalUvZDfp5vvVtTYV",
+        "1bgyxtWjZwA5PQlDsvs9b8",
+        "2P1puQXmG48EVLBrHbum1J"
     ],
     "world": []
 }
