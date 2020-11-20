@@ -2,6 +2,7 @@
     border-radius: 5px;
     background-color: unset;
     color: white;
+    display: contents !important;
 }
 
 body {
@@ -12,6 +13,11 @@ div, p {
     color: white;
 }
 
+.playlist-row {
+    justify-content: flex-end;
+    padding-right: 5%;
+    padding-bottom: 15px;
+}
 .selector {
     width: 100px;
     border-radius: 3px;
@@ -19,12 +25,14 @@ div, p {
     background-color: rgb(59, 59, 59);
 }
 
-
 @media only screen and (min-width: 768px) {
     #recs-container {
         padding-left: 60px;
     }
-
+    #recs-container, #playlist-container {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
     #playlist-container {
         padding-right: 60px;
     }
@@ -32,6 +40,6 @@ div, p {
 
 @media only screen and (min-width: 1100px) {
     #recs-container, #playlist-container {
-        padding: 20px 60px 20px 60px;
+        padding: 40px 60px 40px 60px;
     }
 }

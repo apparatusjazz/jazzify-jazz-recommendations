@@ -22,20 +22,20 @@ class Track extends Component {
         this.props.addRemoveFromPlaylist(this.props.id, inPlaylist);
     }
     render() {
-        let play = this.props.isPlaying && this.props.currentlyPlaying === `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon /> : <PlayArrowRoundedIcon />;
+        let play = this.props.isPlaying && this.props.currentlyPlaying === `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon className="icon pause" /> : <PlayArrowRoundedIcon className="icon play" />;
         let inPlaylist = (id) => {
             let playlist = this.props.playlist;
             if (playlist.includes(this.props.id))
-                return <RemoveCircleOutlineIcon onClick={() => this.addRemovefromPlaylist(true)} />;
+                return <RemoveCircleOutlineIcon className="remove icon" onClick={() => this.addRemovefromPlaylist(true)} />;
             else
-                return <AddCircleOutlineIcon onClick={() => this.addRemovefromPlaylist(false)} />;
+                return <AddCircleOutlineIcon className="add icon" onClick={() => this.addRemovefromPlaylist(false)} />;
         };
         let addRemove = inPlaylist(this.props.id);
         return (
             <Row>
                 <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto" onClick={() => this.togglePlay()}>
                     <audio src={this.props.preview} id={`audio-${this.props.id}`}></audio>
-                    {this.props.preview !== null ? play : <BlockIcon />}
+                    {this.props.preview !== null ? play : <BlockIcon className="block" />}
                 </Col>
                 <Col md="auto" lg="auto" sm="auto" xs="auto">
                     <img className="album-art" src={this.props.album} alt="Album Cover" />
