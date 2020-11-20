@@ -30,7 +30,9 @@
 .remove-genre:hover {
     background-color: rgb(59, 59, 59);
 }
-
+.reset {
+    color: rgb(142, 142, 230);
+}
 .audio-filter-container, .genre-filter-container {
     border-radius: 10px;
     background: rgb(95, 95, 95);

@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import { Slider } from '@material-ui/core';
 import '../css/filters.css';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 
 class AudioFilters extends Component {
     handleChange(val, key) {
         this.props.storeValue(key, val, this.props.type);
+    }
+    handleClick() {
+        this.props.reset(this.props.actualName);
     }
     render() {
         let display = this.props.actualName === "tempo" ? "auto" : "off";
         return (
             <>
                 <div className="filter-name">{this.props.name}</div>
+                <RotateLeftIcon className="reset remove-genre" onClick={() => this.handleClick()} />
                 <Slider
                     key={this.props.name}
                     value={this.props.value}
