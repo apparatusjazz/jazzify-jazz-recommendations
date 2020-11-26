@@ -2,7 +2,6 @@
     border-radius: 5px;
     background-color: unset;
     color: white;
-    display: contents !important;
 }
 
 body {
@@ -13,9 +12,22 @@ div, p {
     color: white;
 }
 
-.playlist-row {
+.remove-all {
+    margin-right: 10px;
+}
+.open-playlist {
+    color: rgb(154, 212, 154);
+    margin-left: 5px;
+}
+.playlist-row-1 {
     justify-content: flex-end;
     padding-right: 5%;
+    padding-bottom: 15px;
+}
+.playlist-row {
+    justify-content: space-between;
+    padding-right: 5%;
+    padding-left: 5%;
     padding-bottom: 15px;
 }
 .selector {

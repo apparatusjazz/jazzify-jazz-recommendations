@@ -1,11 +1,12 @@
-.login-btn {
+.login-btn, .btn-style {
     border-radius: 15px;
+    border: none;
     background-color: rgb(114, 114, 114);
     color: white;
     padding: 6px 20px 6px 20px;
 }
 
-.login-btn:hover {
+.login-btn:hover, .btn-style:hover {
     text-decoration: none;
     color: white;
     background-color: rgb(150, 44, 44);

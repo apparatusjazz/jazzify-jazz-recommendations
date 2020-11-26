@@ -15,7 +15,7 @@ class Filter extends Component {
         return (
             <>
                 <div className="filter-name">{this.props.name}</div>
-                <HighlightOffIcon className="remove-genre" onClick={() => { this.handleClick() }} />
+                <HighlightOffIcon className="remove-genre remove" onClick={() => { this.handleClick() }} />
                 <Slider
                     key={this.props.name}
                     value={this.props.value}
