@@ -13,6 +13,8 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import '../css/main-home.css';
 import AddIcon from '@material-ui/icons/Add';
 import LoginPage from './login-page';
+import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
+import Player from './player';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -43,7 +45,8 @@ class Home extends Component {
             genreSelector: "acoustic",
             isPlaying: false,
             currentlyPlaying: "",
-            loggedIn: false
+            loggedIn: false,
+            playlistLink: ""
         }
         this.addRemoveFromPlaylist = this.addRemoveFromPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
@@ -56,6 +59,7 @@ class Home extends Component {
         this.removeGenre = this.removeGenre.bind(this);
         this.removeAllGenres = this.removeAllGenres.bind(this);
         this.resetFilter = this.resetFilter.bind(this);
+        this.createPlaylist = this.createPlaylist.bind(this);
     }
 
     toggleSwitch() {
@@ -63,7 +67,6 @@ class Home extends Component {
     }
 
     resetFilter(id) {
-        console.log("reset filter", id)
         let modified = { ...this.state.audioFeatures };
         if (id !== "tempo") {
             modified[`min_${id}`] = 0;
@@ -272,7 +275,7 @@ class Home extends Component {
         let recommendations = [], trackIds = [];
         let requests = [];
         let idx = 0;
-        console.log(artists, scaledGenres)
+        // console.log(artists, scaledGenres)
         for (let i in scaledGenres) {       // delete genres that have the track count = 0
             if (genreTrackNum[idx] === 0) {
                 delete scaledGenres[i];
@@ -315,7 +318,10 @@ class Home extends Component {
                 scaledGenres: scaledGenres,
                 filterGenres: scaledGenres
             });
-        }).catch((err) => console.log("There was an error...", err))
+        }).catch((err) => {
+            console.log("There was an error...", err);
+            window.location.reload();
+        })
     }
 
     updateRecommendations() {
@@ -544,6 +550,30 @@ class Home extends Component {
             filterGenres: []
         });
     }
+    createPlaylist() {
+        let current = [...this.state.playlistIDs.map(id => `spotify:track:${id}`)];
+        if (current.length < 1) return;
+        spotifyApi.getMe()
+        spotifyApi.createPlaylist("tonydeska", {
+            "name": "Jazzify",
+            "description": "Playlist created by Jazzify Jazz Recommendations"
+        }).then(res => {
+            const playlistId = res.id;
+            spotifyApi.addTracksToPlaylist(playlistId, current);
+            this.setState({ playlistLink: playlistId });
+        }).catch(err => console.log(err.response))
+    }
+    getCurrentPlayingInfo() {
+        let current = this.state.currentlyPlaying.split("-")[1];
+        let recs = [...this.state.recommendations];
+
+        for (let i = 0; i < recs.length; i++) {
+            if (recs[i].id === current) {
+                return [recs[i].album.images[2].url, recs[i].artists[0].name, recs[i].name];
+            }
+        }
+        return ["", "", ""]
+    }
     componentDidMount() {
         const params = getHashParams();
         if (params.access_token) {
@@ -553,6 +583,7 @@ class Home extends Component {
         spotifyApi.getMe().then(res => this.setState({ loggedIn: true })).catch(err => this.setState({ loggedIn: false }));
         spotifyApi.getMe().then(data => {
             this.country = data.country;
+            this.userId = data.id;
             this.getSeedTracks();
         }).catch(err => console.log(err))
 
@@ -577,7 +608,17 @@ class Home extends Component {
                 {options.map(el => <option key={el} value={el}>{el}</option>)}
             </select>
             <AddIcon onClick={() => this.addGenre()} />
-        </>
+        </>;
+
+        const playlistLink = this.state.playlistLink !== "" ? (<a
+            href={`https://open.spotify.com/playlist/${this.state.playlistLink}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open in Spotify"
+        >
+            <OpenInNewRoundedIcon className="open-playlist" />
+        </a>) : <OpenInNewRoundedIcon className="open-playlist" />;
+        const playingInfo = this.getCurrentPlayingInfo();
 
         const audioFilterClass = this.state.audioSwitch ? 'audio-filter-container' : 'audio-filter-container-inactive';
         return (
@@ -587,8 +628,8 @@ class Home extends Component {
                 <Container fluid>
                     <Row>
                         <Col id="recs-container" lg={5} md={5} xs={12}>
-                            <Row className="playlist-row">
-                                <button onClick={this.addAllToPlaylist} className="btn">Add All</button>
+                            <Row className="playlist-row-1">
+                                <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
                             </Row>
                             {recs}
                         </Col>
@@ -602,10 +643,10 @@ class Home extends Component {
                             </div>
                             <div className="genre-filter-container">
                                 Genres
-                                <button className="btn" onClick={this.removeAllGenres}>Clear All</button>
+                                <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
                                 <div>{genres}</div>
                                 {genreFilt}
-                                <button className="refresh-btn btn" onClick={this.updateRecommendations}>
+                                <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
                                     <RefreshIcon />
                                     Refresh
                                     </button>
@@ -613,12 +654,22 @@ class Home extends Component {
                         </Col>
                         <Col id="playlist-container" lg={5} md={5}>
                             <Row className="playlist-row">
-                                {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn">Remove All</button> : ""}
+                                <span>
+                                    <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
+                                    {playlistLink}
+                                </span>
+                                {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
                             </Row>
                             {playlist}
                         </Col>
                     </Row>
                 </Container>
+                <Player
+                    playing={this.state.isPlaying}
+                    img={playingInfo[0]}
+                    artistName={playingInfo[1]}
+                    songName={playingInfo[2]}
+                />
             </div>
         )
     }
