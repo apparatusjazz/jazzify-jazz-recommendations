@@ -43,7 +43,11 @@
 .song, .artist {
     position: relative;
 }
-
+.default-album {
+    top: 16px;
+    left: 40px;
+    color: rgba(196, 196, 196, 0.384);
+}
 .info-container .song {
     width: 300px;
     overflow: hidden;
