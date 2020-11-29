@@ -9,4 +9,54 @@
 .album-player {
     width: 45px;
     height: 45px;
+    left: 40px;
+    top: 8px;
+}
+
+.p-container {
+    position: relative;
+}
+
+.p-el {
+    position: absolute;
+}
+
+.info-container {
+    left: 100px;
+    top: 8px;
+}
+
+.play-button {
+    left: 49%;
+    top: 15px;
+}
+
+.play-button button {
+    background-color: transparent;
+    border: none;
+}
+
+.p-el .MuiSvgIcon-root {
+    font-size: 2rem;
+}
+
+.song, .artist {
+    position: relative;
+}
+
+.info-container .song {
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media only screen and (max-width: 768px) {
+    .play-button {
+        left: 85%;
+    }
+    .info-container .song {
+        width: 220px;
+    }
 }

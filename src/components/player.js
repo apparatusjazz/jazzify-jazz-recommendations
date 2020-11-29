@@ -7,17 +7,18 @@ import PauseCircleFilledRoundedIcon from '@material-ui/icons/PauseCircleFilledRo
 const Player = (props) => {
 
     const play = !props.playing ? <PlayArrowRoundedIcon className="play" /> : <PauseCircleFilledRoundedIcon className="pause" />;
-
     return (
         <>
             <div className="player">
-                <img className="album-player" src={props.img} />
-                <div className="info-container">
-                    <div>{props.songName}</div>
-                    <div>{props.artistName}</div>
-                </div>
-                <div className="play-button">
-                    {play}
+                <div className="p-container">
+                    <img className="p-el album-player" src={props.img} />
+                    <div className="p-el info-container">
+                        <div className="p-el song">{props.songName}</div>
+                        <div className="p-el artist">{props.artistName}</div>
+                    </div>
+                    <div className="p-el play-button">
+                        <button onClick={() => props.togglePlay()}>{play}</button>
+                    </div>
                 </div>
             </div>
         </>

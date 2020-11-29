@@ -669,6 +669,7 @@ class Home extends Component {
                     img={playingInfo[0]}
                     artistName={playingInfo[1]}
                     songName={playingInfo[2]}
+                    togglePlay={this.togglePlay}
                 />
             </div>
         )
