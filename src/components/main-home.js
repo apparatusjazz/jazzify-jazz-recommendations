@@ -7,7 +7,7 @@ import jazzCollection from '../jazz-collection';
 import initalMappings from '../initial-map';
 import Filter from './filters';
 import AudioFilters from './audioFilters';
-import { Switch } from '@material-ui/core';
+import { CircularProgress, Switch } from '@material-ui/core';
 import Navigation from './navigation';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import '../css/main-home.css';
@@ -47,7 +47,8 @@ class Home extends Component {
             isPlaying: false,
             currentlyPlaying: "",
             loggedIn: false,
-            playlistLink: ""
+            playlistLink: "",
+            loading: true
         }
         this.addRemoveFromPlaylist = this.addRemoveFromPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
@@ -318,7 +319,8 @@ class Home extends Component {
             this.setState({
                 recommendations: recommendations,
                 scaledGenres: scaledGenres,
-                filterGenres: scaledGenres
+                filterGenres: scaledGenres,
+                loading: false
             });
         }).catch((err) => {
             console.log("There was an error...", err);
@@ -331,6 +333,7 @@ class Home extends Component {
         let genreTrackNum = this.calcTracksPerGenre(scaledGenres);
         let collection = this.getArtistsFromCollection(scaledGenres, jazzCollection);
         this.getRecommendations(scaledGenres, collection, {}, this.state.audioFeatures, genreTrackNum);
+        this.setState({ loading: true });
     }
 
     calcTracksPerGenre(scaledGenres) {  // Input scaled genre stats
@@ -622,13 +625,15 @@ class Home extends Component {
             <OpenInNewRoundedIcon className="open-playlist" />
         </a>) : <OpenInNewRoundedIcon className="open-playlist" />;
         const playingInfo = this.getCurrentPlayingInfo();
-
+        const progressClass = this.state.loading ? "show" : "hide";
+        const rowClass = !this.state.loading ? "show" : "hide";
         const audioFilterClass = this.state.audioSwitch ? 'audio-filter-container' : 'audio-filter-container-inactive';
         let login = <><Navigation loggedIn={this.state.loggedIn} /><LoginPage /></>
         let mainContent = <div>
             <Navigation loggedIn={this.state.loggedIn} />
-            <Container fluid>
-                <Row>
+            <Container fluid className="jazzify-main">
+                <CircularProgress className={`${progressClass} loading-icon`} />
+                <Row className={rowClass}>
                     <Col id="recs-container" lg={5} md={5} xs={12}>
                         <Row className="playlist-row-1">
                             <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
@@ -665,7 +670,7 @@ class Home extends Component {
                         {playlist}
                     </Col>
                 </Row>
-                <Row className="footer">
+                <Row className={`${rowClass} footer`}>
                     <Footer />
                 </Row>
             </Container>
