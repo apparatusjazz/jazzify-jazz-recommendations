@@ -15,6 +15,7 @@ import AddIcon from '@material-ui/icons/Add';
 import LoginPage from './login-page';
 import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 import Player from './player';
+import Footer from './footer';
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -79,6 +80,7 @@ class Home extends Component {
     }
     togglePlay() {
         let audio = document.getElementById(this.state.currentlyPlaying);
+        if (audio === null) return;
         if (this.state.isPlaying) {
             audio.pause();
         } else audio.play();
@@ -553,9 +555,10 @@ class Home extends Component {
     createPlaylist() {
         let current = [...this.state.playlistIDs.map(id => `spotify:track:${id}`)];
         if (current.length < 1) return;
-        spotifyApi.getMe()
+        let date = Date().split(" ");
+        let dateString = `${date[1]}-${date[2]}-${date[3]}`;
         spotifyApi.createPlaylist("tonydeska", {
-            "name": "Jazzify",
+            "name": `Jazzify: ${dateString}`,
             "description": "Playlist created by Jazzify Jazz Recommendations"
         }).then(res => {
             const playlistId = res.id;
@@ -607,7 +610,7 @@ class Home extends Component {
             <select className="selector" name="genres" onChange={(event) => this.handleChangeGenre(event)}>
                 {options.map(el => <option key={el} value={el}>{el}</option>)}
             </select>
-            <AddIcon onClick={() => this.addGenre()} />
+            <AddIcon className="add-icon" onClick={() => this.addGenre()} />
         </>;
 
         const playlistLink = this.state.playlistLink !== "" ? (<a
@@ -621,57 +624,62 @@ class Home extends Component {
         const playingInfo = this.getCurrentPlayingInfo();
 
         const audioFilterClass = this.state.audioSwitch ? 'audio-filter-container' : 'audio-filter-container-inactive';
-        return (
-            <div>
-                <Navigation />
-                {this.state.loggedIn ? '' : <LoginPage />}
-                <Container fluid>
-                    <Row>
-                        <Col id="recs-container" lg={5} md={5} xs={12}>
-                            <Row className="playlist-row-1">
-                                <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
-                            </Row>
-                            {recs}
-                        </Col>
-                        <Col id="filter-container" lg={2} md={2}>
-                            <div className={audioFilterClass}>
-                                <div>
-                                    Audio Filters
+        let login = <><Navigation loggedIn={this.state.loggedIn} /><LoginPage /></>
+        let mainContent = <div>
+            <Navigation loggedIn={this.state.loggedIn} />
+            <Container fluid>
+                <Row>
+                    <Col id="recs-container" lg={5} md={5} xs={12}>
+                        <Row className="playlist-row-1">
+                            <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
+                        </Row>
+                        {recs}
+                    </Col>
+                    <Col id="filter-container" lg={2} md={2}>
+                        <div className={audioFilterClass}>
+                            <div>
+                                Audio Filters
                                 <Switch checked={this.state.audioSwitch} size="small" onChange={this.toggleSwitch} />
-                                </div>
-                                {audioF}
                             </div>
-                            <div className="genre-filter-container">
-                                Genres
+                            {audioF}
+                        </div>
+                        <div className="genre-filter-container">
+                            Genres
                                 <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
-                                <div>{genres}</div>
-                                {genreFilt}
-                                <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
-                                    <RefreshIcon />
+                            <div>{genres}</div>
+                            {genreFilt}
+                            <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
+                                <RefreshIcon />
                                     Refresh
                                     </button>
-                            </div>
-                        </Col>
-                        <Col id="playlist-container" lg={5} md={5}>
-                            <Row className="playlist-row">
-                                <span>
-                                    <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
-                                    {playlistLink}
-                                </span>
-                                {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
-                            </Row>
-                            {playlist}
-                        </Col>
-                    </Row>
-                </Container>
-                <Player
-                    playing={this.state.isPlaying}
-                    img={playingInfo[0]}
-                    artistName={playingInfo[1]}
-                    songName={playingInfo[2]}
-                    togglePlay={this.togglePlay}
-                />
-            </div>
+                        </div>
+                    </Col>
+                    <Col id="playlist-container" lg={5} md={5}>
+                        <Row className="playlist-row">
+                            <span>
+                                <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
+                                {playlistLink}
+                            </span>
+                            {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
+                        </Row>
+                        {playlist}
+                    </Col>
+                </Row>
+                <Row className="footer">
+                    <Footer />
+                </Row>
+            </Container>
+
+            <Player
+                playing={this.state.isPlaying}
+                img={playingInfo[0]}
+                artistName={playingInfo[1]}
+                songName={playingInfo[2]}
+                togglePlay={this.togglePlay}
+            />
+        </div>;
+        return (
+            this.state.loggedIn ? mainContent : login
         )
     }
 }
