@@ -1,0 +1,25 @@
+.github {
+    width: 16px !important;
+    height: 16px !important;
+    margin: 3px;
+    color: white;
+}
+
+.github:hover {
+    color: rgb(194, 194, 194);
+}
+
+.about-tag {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.about-tag:hover {
+    color: rgb(194, 194, 194) !important;
+}
+
+.footer {
+    justify-content: center;
+    font-size: 12px;
+}
