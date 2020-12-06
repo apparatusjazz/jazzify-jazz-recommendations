@@ -6,7 +6,6 @@ import AlbumIcon from '@material-ui/icons/Album';
 
 
 const Player = (props) => {
-    console.log(props)
     const defaultAlbum = <AlbumIcon className="p-el default-album" />
     const play = !props.playing ? <PlayArrowRoundedIcon className="play" /> : <PauseCircleFilledRoundedIcon className="pause" />;
     return (

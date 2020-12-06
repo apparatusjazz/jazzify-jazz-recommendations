@@ -9,3 +9,9 @@
 .nav-right {
     padding-right: 8%;
 }
+
+.navbar-brand {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 4%;
+}

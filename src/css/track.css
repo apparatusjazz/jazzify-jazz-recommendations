@@ -34,11 +34,11 @@
     background-color: rgb(43, 43, 43);
 }
 .add {
-    color: rgb(154, 212, 154);
+    color: #ece474;
 }
 
 .remove {
-    color: rgb(231, 162, 162);
+    color: #d19fe4;
 }
 
 .play, .pause, .block {
