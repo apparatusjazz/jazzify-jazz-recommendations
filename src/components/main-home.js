@@ -7,7 +7,7 @@ import jazzCollection from '../jazz-collection';
 import initalMappings from '../initial-map';
 import Filter from './filters';
 import AudioFilters from './audioFilters';
-import { CircularProgress, Switch } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, AppBar, CircularProgress, Switch, Typography } from '@material-ui/core';
 import Navigation from './navigation';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import '../css/main-home.css';
@@ -16,6 +16,39 @@ import LoginPage from './login-page';
 import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 import Player from './player';
 import Footer from './footer';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import PropTypes from 'prop-types';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Box from '@material-ui/core/Box';
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`tabpanel-${index}`}
+            aria-labelledby={`recs-playlist-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
 
 const NUMOFTRACKS = 30;
 const spotifyApi = new Spotify();
@@ -48,7 +81,8 @@ class Home extends Component {
             currentlyPlaying: "",
             loggedIn: false,
             playlistLink: "",
-            loading: true
+            loading: true,
+            tabValue: 0
         }
         this.addRemoveFromPlaylist = this.addRemoveFromPlaylist.bind(this);
         this.addAllToPlaylist = this.addAllToPlaylist.bind(this);
@@ -62,10 +96,14 @@ class Home extends Component {
         this.removeAllGenres = this.removeAllGenres.bind(this);
         this.resetFilter = this.resetFilter.bind(this);
         this.createPlaylist = this.createPlaylist.bind(this);
+        this.tabChange = this.tabChange.bind(this);
     }
 
     toggleSwitch() {
         this.setState({ audioSwitch: !this.state.audioSwitch });
+    }
+    tabChange(event, newVal) {
+        this.setState({ tabValue: newVal });
     }
 
     resetFilter(id) {
@@ -633,14 +671,81 @@ class Home extends Component {
             <Navigation loggedIn={this.state.loggedIn} />
             <Container fluid className="jazzify-main">
                 <CircularProgress className={`${progressClass} loading-icon`} />
-                <Row className={rowClass}>
-                    <Col id="recs-container" lg={5} md={5} xs={12}>
+                <Col className={`${rowClass} filter-container mobile accordion`} lg={2} md={2}>
+                    <Accordion className="mobile accordion">
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Modify Filters
+                            <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
+                                    <RefreshIcon />
+                                </button>
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                <div className={audioFilterClass}>
+                                    <div>
+                                        Audio Filters
+                                <Switch checked={this.state.audioSwitch} size="small" onChange={this.toggleSwitch} />
+                                    </div>
+                                    {audioF}
+                                </div>
+                                <div className="genre-filter-container">
+                                    Genres
+                                <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
+                                    <div>{genres}</div>
+                                    {genreFilt}
+                                    <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
+                                        <RefreshIcon />
+                                    Refresh
+                                    </button>
+                                </div>
+
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                </Col>
+                <div className="mobile tabs">
+                    <AppBar position="static">
+                        <Tabs value={this.state.tabValue} variant="fullWidth" onChange={this.tabChange} aria-label="recs-playlist-tabs">
+                            <Tab label="Recommendations" />
+                            <Tab label="Playlist" />
+                        </Tabs>
+                    </AppBar>
+                    <TabPanel value={this.state.tabValue} index={0}>
+                        <Col className="recs-container" lg={5} md={5} xs={12}>
+                            <Row className="playlist-row-1">
+                                <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
+                            </Row>
+                            {recs}
+                        </Col>
+
+                    </TabPanel>
+                    <TabPanel value={this.state.tabValue} index={1}>
+                        <Col className="playlist-container" lg={5} md={5}>
+                            <Row className="playlist-row">
+                                <span>
+                                    <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
+                                    {playlistLink}
+                                </span>
+                                {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
+                            </Row>
+                            {playlist}
+                        </Col>
+                    </TabPanel>
+                </div>
+                <Row className={`${rowClass}`}>
+                    <Col className="recs-container desktop" lg={5} md={5} xs={12}>
                         <Row className="playlist-row-1">
                             <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
                         </Row>
                         {recs}
                     </Col>
-                    <Col id="filter-container" lg={2} md={2}>
+                    <Col className="filter-container desktop" lg={2} md={2} xs={12}>
+
                         <div className={audioFilterClass}>
                             <div>
                                 Audio Filters
@@ -653,13 +758,14 @@ class Home extends Component {
                                 <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
                             <div>{genres}</div>
                             {genreFilt}
-                            <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
+                            <button className="btn-style" onClick={this.updateRecommendations}>
                                 <RefreshIcon />
                                     Refresh
                                     </button>
                         </div>
+
                     </Col>
-                    <Col id="playlist-container" lg={5} md={5}>
+                    <Col className="playlist-container desktop" lg={5} md={5}>
                         <Row className="playlist-row">
                             <span>
                                 <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>

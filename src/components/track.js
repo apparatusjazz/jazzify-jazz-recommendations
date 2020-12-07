@@ -22,7 +22,9 @@ class Track extends Component {
         this.props.addRemoveFromPlaylist(this.props.id, inPlaylist);
     }
     render() {
-        let play = this.props.isPlaying && this.props.currentlyPlaying === `audio-${this.props.id}` ? <PauseCircleFilledRoundedIcon className="icon pause" /> : <PlayArrowRoundedIcon className="icon play" />;
+        let play = this.props.isPlaying && this.props.currentlyPlaying === `audio-${this.props.id}` ?
+            <PauseCircleFilledRoundedIcon className="icon pause" onClick={() => this.togglePlay()} />
+            : <PlayArrowRoundedIcon className="icon play" onClick={() => this.togglePlay()} />;
         let inPlaylist = (id) => {
             let playlist = this.props.playlist;
             if (playlist.includes(this.props.id))
@@ -31,31 +33,32 @@ class Track extends Component {
                 return <AddCircleOutlineIcon className="add icon" onClick={() => this.addRemovefromPlaylist(false)} />;
         };
         let addRemove = inPlaylist(this.props.id);
-        return (
-            <Row>
-                <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto" onClick={() => this.togglePlay()}>
-                    <audio src={this.props.preview} id={`audio-${this.props.id}`}></audio>
-                    {this.props.preview !== null ? play : <BlockIcon className="block" />}
-                </Col>
-                <Col md="auto" lg="auto" sm="auto" xs="auto">
-                    <img className="album-art" src={this.props.album} alt="Album Cover" />
-                </Col>
+        document.getElementsByClassName('.track').
+            return(
+                <Row>
+                    <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto">
+                        <audio src={this.props.preview} id={`audio-${this.props.id}`}></audio>
+                        {this.props.preview !== null ? play : <BlockIcon className="block" />}
+                    </Col>
+                    <Col md="auto" lg="auto" sm="auto" xs="auto">
+                        <img className="album-art" src={this.props.album} alt="Album Cover" />
+                    </Col>
 
-                <Col >
-                    <Row className="song text">
-                        {this.props.song}
-                    </Row>
-                    <Row className="artist text">
-                        {this.props.artist}
-                    </Row>
-                </Col>
+                    <Col>
+                        <Row className="song text">
+                            {this.props.song}
+                        </Row>
+                        <Row className="artist text">
+                            {this.props.artist}
+                        </Row>
+                    </Col>
 
-                <Col md="auto" lg="auto" sm="auto" xs="auto">
-                    {addRemove}
-                </Col>
-            </Row>
+                    <Col md="auto" lg="auto" sm="auto" xs="auto">
+                        {addRemove}
+                    </Col>
+                </Row>
 
-        )
+            )
     }
 }
 
