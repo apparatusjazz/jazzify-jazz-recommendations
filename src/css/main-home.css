@@ -13,6 +13,19 @@ body {
 div, p {
     color: white;
 }
+.MuiTabs-indicator {
+    background-color: #d19fe4 !important;
+}
+.filter-container.accordion {
+    padding-left: 0;
+    padding-right: 0;
+    background-color: rgb(59, 59, 59) !important;
+    box-shadow: none !important;
+}
+.refresh-btn {
+    padding: 2px !important;
+    margin-left: 20px;
+}
 .loading-icon {
     margin-top: 50vh;
     color:  #ece474 !important;
@@ -53,26 +66,56 @@ div, p {
 .hide {
     display: none !important;
 }
+.mobile {
+    display: none;
+}
+.desktop {
+    display: inline-block;
+}
+.accordion {
+    background-color: rgb(59, 59, 59) !important;
+}
+.MuiPaper-elevation1 {
+    box-shadow: none !important;
+}
+.MuiIconButton-root {
+    color: white !important;
+}
 @media only screen and (min-width: 768px) {
-    #recs-container {
+    .recs-container {
         padding-left: 60px;
     }
-    #recs-container, #playlist-container {
+    .recs-container, .playlist-container {
         padding-top: 40px;
         padding-bottom: 40px;
     }
-    #playlist-container {
+    .playlist-container {
         padding-right: 60px;
     }
 }
 
 @media only screen and (min-width: 1100px) {
-    #recs-container, #playlist-container {
+    .recs-container, .playlist-container {
         padding: 40px 60px 40px 60px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .mobile {
+        display: inline-block;
+        min-width: 100%;
+    }
+    .desktop {
+        display: none;
     }
 }
 
 button:focus {
     outline: none;
     box-shadow: none;
-  }
+}
+
+.MuiAppBar-colorPrimary {
+    background-color: rgb(59, 59, 59) !important;
+    box-shadow: none !important;
+}

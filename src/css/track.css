@@ -21,6 +21,12 @@
     text-overflow: ellipsis;
 }
 
+@media only screen and (max-width: 500px) {
+    .text {
+        max-width: 300px;
+    }
+}
+
 .play-container {
     padding-right: 5px;
     padding-left: 10px;

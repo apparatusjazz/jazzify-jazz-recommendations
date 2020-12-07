@@ -17,6 +17,7 @@
 
 .about-tag:hover {
     color: rgb(194, 194, 194) !important;
+    text-decoration: underline;
 }
 
 .footer {

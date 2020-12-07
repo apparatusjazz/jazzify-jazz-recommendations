@@ -15,3 +15,7 @@
     padding-bottom: 0 !important;
     padding-left: 4%;
 }
+
+.logout:hover {
+    color: rgb(126, 126, 126);
+}

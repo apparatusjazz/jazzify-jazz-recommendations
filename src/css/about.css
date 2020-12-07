@@ -2,3 +2,23 @@
     background-color: rgb(80, 80, 80);
     border: none;
 }
+
+.close-modal {
+    background-color: #acacac;
+    color:  rgb(80, 80, 80);
+    border: none;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.close-modal:hover {
+    background-color: #d19fe4;
+}
+
+.modal-body {
+    text-align: left;
+}
+
+button span {
+    color: white;
+}
