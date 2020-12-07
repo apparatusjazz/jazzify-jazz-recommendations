@@ -17,7 +17,7 @@ const Navigation = (props) => {
                     />
                 </Navbar.Brand>
                 <Nav className="ml-auto nav-right">
-                    {props.loggedIn ? <a target="_blank" rel="noopener noreferrer" className="btn" onClick={() => logout()} id="logout-btn" href={"https://www.spotify.com/logout"}>
+                    {props.loggedIn ? <a target="_blank" rel="noopener noreferrer" className="btn logout" onClick={() => logout()} id="logout-btn" href={"https://www.spotify.com/logout"}>
                         Logout
                         </a> : ''}
                 </Nav>
