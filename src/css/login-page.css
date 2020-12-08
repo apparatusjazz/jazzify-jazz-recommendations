@@ -3,7 +3,7 @@
     border: none;
     background-color: rgb(114, 114, 114);
     color: white;
-    padding: 6px 20px 6px 20px;
+    padding: 4px 20px;
 }
 
 .login-btn:hover, .btn-style:hover {

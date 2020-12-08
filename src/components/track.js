@@ -33,32 +33,31 @@ class Track extends Component {
                 return <AddCircleOutlineIcon className="add icon" onClick={() => this.addRemovefromPlaylist(false)} />;
         };
         let addRemove = inPlaylist(this.props.id);
-        document.getElementsByClassName('.track').
-            return(
-                <Row>
-                    <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto">
-                        <audio src={this.props.preview} id={`audio-${this.props.id}`}></audio>
-                        {this.props.preview !== null ? play : <BlockIcon className="block" />}
-                    </Col>
-                    <Col md="auto" lg="auto" sm="auto" xs="auto">
-                        <img className="album-art" src={this.props.album} alt="Album Cover" />
-                    </Col>
+        return (
+            <Row>
+                <Col className="play-container" md="auto" lg="auto" sm="auto" xs="auto">
+                    <audio src={this.props.preview} id={`audio-${this.props.id}`}></audio>
+                    {this.props.preview !== null ? play : <BlockIcon className="block" />}
+                </Col>
+                <Col md="auto" lg="auto" sm="auto" xs="auto">
+                    <img className="album-art" src={this.props.album} alt="Album Cover" />
+                </Col>
 
-                    <Col>
-                        <Row className="song text">
-                            {this.props.song}
-                        </Row>
-                        <Row className="artist text">
-                            {this.props.artist}
-                        </Row>
-                    </Col>
+                <Col>
+                    <Row className="song text">
+                        {this.props.song}
+                    </Row>
+                    <Row className="artist text">
+                        {this.props.artist}
+                    </Row>
+                </Col>
 
-                    <Col md="auto" lg="auto" sm="auto" xs="auto">
-                        {addRemove}
-                    </Col>
-                </Row>
+                <Col md="auto" lg="auto" sm="auto" xs="auto">
+                    {addRemove}
+                </Col>
+            </Row>
 
-            )
+        )
     }
 }
 

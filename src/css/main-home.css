@@ -4,7 +4,7 @@
     color: white;
 }
 .jazzify-main {
-    min-height: 100vh;
+    min-height: 90vh;
 }
 body {
     background-color: rgb(59, 59, 59);
@@ -12,6 +12,10 @@ body {
 
 div, p {
     color: white;
+}
+.add-all {
+    display: block;
+    width: 90%;
 }
 .MuiTabs-indicator {
     background-color: #d19fe4 !important;
@@ -21,10 +25,13 @@ div, p {
     padding-right: 0;
     background-color: rgb(59, 59, 59) !important;
     box-shadow: none !important;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: #d19fe4;
 }
 .refresh-btn {
     padding: 2px !important;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .loading-icon {
     margin-top: 50vh;
@@ -49,13 +56,13 @@ div, p {
     padding-bottom: 15px;
 }
 .selector {
-    width: 100px;
     border-radius: 3px;
     color: white;
     background-color: rgb(59, 59, 59);
 }
 .add-icon {
     border-radius: 100%;
+    margin-bottom: 7px;
 }
 .add-icon:hover {
     background-color: rgb(114, 114, 114);
@@ -118,4 +125,21 @@ button:focus {
 .MuiAppBar-colorPrimary {
     background-color: rgb(59, 59, 59) !important;
     box-shadow: none !important;
+}
+.MuiAppBar-root {
+    padding-bottom: 20px;
+}
+
+.mobile.tabs.show {
+    padding-bottom: 20px;
+    min-height: 75vh;
+}
+.clear-all {
+    margin-bottom: 7px;
+}
+#tabpanel-1 {
+    min-height: 64vh;
+}
+.MuiTypography-body1 {
+    min-width: 100% !important;
 }

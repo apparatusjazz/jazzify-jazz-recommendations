@@ -678,7 +678,7 @@ class Home extends Component {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography>Modify Filters
+                            <Typography>MODIFY FILTERS
                             <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
                                     <RefreshIcon />
                                 </button>
@@ -695,7 +695,7 @@ class Home extends Component {
                                 </div>
                                 <div className="genre-filter-container">
                                     Genres
-                                <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
+                                <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                                     <div>{genres}</div>
                                     {genreFilt}
                                     <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
@@ -708,7 +708,7 @@ class Home extends Component {
                         </AccordionDetails>
                     </Accordion>
                 </Col>
-                <div className="mobile tabs">
+                <div className={`mobile tabs ${rowClass}`}>
                     <AppBar position="static">
                         <Tabs value={this.state.tabValue} variant="fullWidth" onChange={this.tabChange} aria-label="recs-playlist-tabs">
                             <Tab label="Recommendations" />
@@ -718,7 +718,7 @@ class Home extends Component {
                     <TabPanel value={this.state.tabValue} index={0}>
                         <Col className="recs-container" lg={5} md={5} xs={12}>
                             <Row className="playlist-row-1">
-                                <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
+                                <button onClick={this.addAllToPlaylist} className="btn-style add-all">Add All</button>
                             </Row>
                             {recs}
                         </Col>
@@ -740,7 +740,7 @@ class Home extends Component {
                 <Row className={`${rowClass}`}>
                     <Col className="recs-container desktop" lg={5} md={5} xs={12}>
                         <Row className="playlist-row-1">
-                            <button onClick={this.addAllToPlaylist} className="btn-style">Add All</button>
+                            <button onClick={this.addAllToPlaylist} className="btn-style add-all">Add All</button>
                         </Row>
                         {recs}
                     </Col>
@@ -755,7 +755,7 @@ class Home extends Component {
                         </div>
                         <div className="genre-filter-container">
                             Genres
-                                <div><button className="btn-style" onClick={this.removeAllGenres}>Clear All</button></div>
+                                <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                             <div>{genres}</div>
                             {genreFilt}
                             <button className="btn-style" onClick={this.updateRecommendations}>
@@ -788,7 +788,7 @@ class Home extends Component {
                 songName={playingInfo[2]}
                 togglePlay={this.togglePlay}
             />
-        </div>;
+        </div >;
         return (
             this.state.loggedIn ? mainContent : login
         )
