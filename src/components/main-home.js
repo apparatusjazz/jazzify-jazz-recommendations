@@ -36,7 +36,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box>
-                    <Typography>{children}</Typography>
+                    <Typography component={'div'}>{children}</Typography>
                 </Box>
             )}
         </div>
@@ -624,17 +624,13 @@ class Home extends Component {
             spotifyApi.setAccessToken(params.access_token);
             console.log("logged in successfully!")
         }
-        spotifyApi.getMe().then(res => this.setState({ loggedIn: true })).catch(err => this.setState({ loggedIn: false }));
         spotifyApi.getMe().then(data => {
             this.country = data.country;
             this.userId = data.id;
             this.getSeedTracks();
-        }).catch(err => console.log(err))
+            this.setState({ loggedIn: true })
+        }).catch(err => this.setState({ loggedIn: false }))
 
-        // jazzCollection["guitar"].forEach(artist => {
-        //     spotifyApi.getArtist(artist).then(res => console.log(res.name, artist))
-        // })
-        // this.checkCollection();
     }
     render() {
         let recs = this.createTracks(this.state.recommendations);
@@ -678,14 +674,14 @@ class Home extends Component {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography>MODIFY FILTERS
+                            <Typography component={'div'}>MODIFY FILTERS
                             <button className="refresh-btn btn-style" onClick={this.updateRecommendations}>
                                     <RefreshIcon />
                                 </button>
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
+                            <Typography component={'div'}>
                                 <div className={audioFilterClass}>
                                     <div>
                                         Audio Filters
