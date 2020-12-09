@@ -143,3 +143,9 @@ button:focus {
 .MuiTypography-body1 {
     min-width: 100% !important;
 }
+.MuiAccordionSummary-root {
+    display: inline;
+}
+.MuiAccordionSummary-content {
+    margin-bottom: 0 !important;
+}

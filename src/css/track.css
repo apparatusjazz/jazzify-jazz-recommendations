@@ -2,6 +2,7 @@
     width: 45px;
     height: 45px;
     margin: 2px 0;
+    border-radius: 3px;
 }
 
 .artist {
