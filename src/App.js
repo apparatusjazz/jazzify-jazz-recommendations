@@ -28,7 +28,7 @@ const App = () => {
             <div>
               <SpotifyAuth
                 title='Login with Spotify'
-                redirectUri='http://localhost:3001/'
+                redirectUri='https://jazzify.blue/'
                 onAccessToken={() => window.location.reload()}
                 clientID='7f6f4b0793024b7691ba39cad03291cb'
                 scopes={[Scopes.userReadPrivate,
