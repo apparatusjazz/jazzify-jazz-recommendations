@@ -30,6 +30,7 @@
 .play-button {
     left: 49%;
     top: 15px;
+    padding-right: 0;
 }
 
 .play-button button {
@@ -59,7 +60,7 @@
 
 @media only screen and (max-width: 768px) {
     .play-button {
-        left: 85%;
+        left: 80%;
     }
     .info-container .song {
         width: 220px;
