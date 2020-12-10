@@ -1,30 +1,36 @@
 .filter-name-left {
     text-align: left;
     float: left;
-    font-size: 11px;
+    font-size: 12px;
+    color: rgb(204, 204, 204);
 }
 
 .filter-name {
     text-align: left;
     float: left;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 14px;
 }
 
 .filter-name-right {
     text-align: right;
     float: right;
-    font-size: 11px;
+    font-size: 12px;
+    color: rgb(204, 204, 204);
 }
 
 .MuiSlider-root {
     padding: 10px 0 !important;
 }
-
+.audio-filters {
+    font-size: 20px;
+}
+.genre-filters-container {
+    font-size: 20px;
+}
 .remove-genre {
     float: right;
-    width: 18px !important;
-    height: 18px !important;
+    width: 22px !important;
+    height: 22px !important;
     border-radius: 100%;
 }
 .remove-genre:hover {
@@ -32,6 +38,7 @@
 }
 .reset {
     color: rgb(142, 142, 230);
+    margin-bottom: 6px;
 }
 .audio-filter-container, .genre-filter-container {
     border-radius: 10px;
@@ -58,10 +65,36 @@
 
 hr {
     background-color: rgb(95, 95, 95);
+    margin-top: 1.5rem;
 }
-
+.MuiSlider-thumb {
+    width: 15px !important;
+    height: 15px !important;
+    margin-top: -6px !important;
+}
 @media only screen and (max-width: 768px) {
     #filter-container {
         padding: 5% 5% 5% 5%;
+    }
+    .filter-name-left {
+        font-size: 14px;
+    }
+    
+    .filter-name {
+        font-size: 16px;
+        padding-bottom: 5px;
+    }
+    
+    .filter-name-right {
+        font-size: 14px;
+    }
+    .MuiSlider-thumb {
+        width: 18px !important;
+        height: 18px !important;
+        margin-top: -8px !important;
+    }
+    .remove-genre {
+        width: 24px !important;
+        height: 24px !important;
     }
 }

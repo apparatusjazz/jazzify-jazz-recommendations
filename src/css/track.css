@@ -33,6 +33,14 @@
         max-width: 300px;
     }
 }
+@media only screen and (max-width: 768px) {
+    .song {
+        font-size: 14px;
+    }
+    .artist {
+        font-size: 13px;
+    }
+}
 
 .play-container {
     padding-right: 5px;
@@ -57,3 +65,4 @@
 .play, .pause, .block {
     color: rgb(209, 209, 209);
 }
+
