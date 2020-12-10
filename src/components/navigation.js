@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import '../css/navigation.css';
+import Cookies from 'js-cookie';
 
 const Navigation = (props) => {
+    const token = Cookies.get('spotifyAuthToken');
     const logout = () => {
-        window.location.hash = '';
+        Cookies.remove('spotifyAuthToken');
         window.location.reload();
     }
     return (
@@ -17,9 +19,9 @@ const Navigation = (props) => {
                     />
                 </Navbar.Brand>
                 <Nav className="ml-auto nav-right">
-                    {props.loggedIn ? <a target="_blank" rel="noopener noreferrer" className="btn logout" onClick={() => logout()} id="logout-btn" href={"https://www.spotify.com/logout"}>
+                    {token ? <button target="_blank" rel="noopener noreferrer" className="btn logout" onClick={() => logout()} id="logout-btn" href={"https://www.spotify.com/logout"}>
                         Logout
-                        </a> : ''}
+                        </button> : ''}
                 </Nav>
             </Navbar>
         </>

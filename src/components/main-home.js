@@ -17,6 +17,8 @@ import OpenInNewRoundedIcon from '@material-ui/icons/OpenInNewRounded';
 import Player from './player';
 import Footer from './footer';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { SpotifyApiContext } from 'react-spotify-api';
+import Cookies from 'js-cookie'
 
 import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
@@ -620,11 +622,14 @@ class Home extends Component {
         return ["", "", ""]
     }
     componentDidMount() {
-        const params = getHashParams();
-        if (params.access_token) {
-            spotifyApi.setAccessToken(params.access_token);
-            console.log("logged in successfully!")
-        }
+        // const params = getHashParams();
+        // if (params.access_token) {
+        //     spotifyApi.setAccessToken(params.access_token);
+        //     console.log("logged in successfully!")
+        // }
+        window.location.hash = '';
+        const token = Cookies.get('spotifyAuthToken');
+        spotifyApi.setAccessToken(token);
         spotifyApi.getMe().then(data => {
             this.country = data.country;
             this.userId = data.id;
@@ -787,7 +792,7 @@ class Home extends Component {
             />
         </div >;
         return (
-            this.state.loggedIn ? mainContent : login
+            mainContent
         )
     }
 }
