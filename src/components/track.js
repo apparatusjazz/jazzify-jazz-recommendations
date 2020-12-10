@@ -45,7 +45,15 @@ class Track extends Component {
 
                 <Col>
                     <Row className="song text">
-                        {this.props.song}
+                        <a
+                            className="song-link"
+                            href={this.props.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="open track in spotify"
+                        >
+                            {this.props.song}
+                        </a>
                     </Row>
                     <Row className="artist text">
                         {this.props.artist}

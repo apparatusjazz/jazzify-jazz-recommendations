@@ -407,7 +407,7 @@ class Home extends Component {
     }
 
     createTracks(recommendations) {
-        let track = (id, album, song, artist, preview) => {
+        let track = (id, album, song, artist, preview, url) => {
             return (
                 <Track
                     key={id}
@@ -422,11 +422,12 @@ class Home extends Component {
                     togglePlay={this.togglePlay}
                     updateCurrent={this.updateCurrentlyPlaying}
                     playlist={this.state.playlistIDs}
+                    url={url}
                 />
             )
         }
         return recommendations.map(el =>
-            track(el.id, el.album.images[2].url, el.name, el.artists[0].name, el.preview_url)
+            track(el.id, el.album.images[2].url, el.name, el.artists[0].name, el.preview_url, el.external_urls.spotify)
         )
     }
 
@@ -716,7 +717,7 @@ class Home extends Component {
                             <Row className="playlist-row-1">
                                 <button onClick={this.addAllToPlaylist} className="btn-style add-all">Add All</button>
                             </Row>
-                            {recs}
+                            {recs.length === 0 ? "No results found, try to adjust the filters." : recs}
                         </Col>
 
                     </TabPanel>
@@ -738,7 +739,7 @@ class Home extends Component {
                         <Row className="playlist-row-1">
                             <button onClick={this.addAllToPlaylist} className="btn-style add-all">Add All</button>
                         </Row>
-                        {recs}
+                        {recs.length === 0 ? "No results found, try to adjust the filters." : recs}
                     </Col>
                     <Col className="filter-container desktop" lg={2} md={2} xs={12}>
 

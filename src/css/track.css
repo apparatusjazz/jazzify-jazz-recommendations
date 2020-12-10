@@ -8,8 +8,14 @@
 .artist {
     font-size: 11px;
     text-align: left;
+    color: rgb(192, 192, 192);
 }
-
+.song-link {
+    color: white;
+}
+.song-link:hover {
+    color: rgb(192, 192, 192);
+}
 .song {
     font-size: 12px;
     text-align: left;
