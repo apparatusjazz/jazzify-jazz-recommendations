@@ -26,7 +26,9 @@ const jazzCollection = {
         "0EodhzA6yW1bIdD5B4tcmJ",
         "1pBuKaLHJlIlqYxQQaflve",
         "1GxkXlMwML1oSg5eLPiAz3",
-        "5RdEgvFMoLubrYet7DNjia"
+        "5RdEgvFMoLubrYet7DNjia",
+        "5ElbcIDCAB1mhTzTlR9RN5",
+        "48F7fzeDb7gxJm8I9tHVRW"
     ],
     "bluegrass": [
         "5Zmur9D9gpr6tXyDrpnbOe"
@@ -51,7 +53,8 @@ const jazzCollection = {
         "3Rq3YOF9YG9YfCWD4D56RZ",
         "6mWAKV1AAFvzxQr7uztRE9",
         "0HoPjo2Li9pqBLkR50p63C",
-        "3yKoHgjtyenCOIRaD2Gghu"
+        "3yKoHgjtyenCOIRaD2Gghu",
+        "6RuS4udHwx3C9ysk4KXtNw"
     ],
     "classical": [
         "2TSuAchdgVzsAa9wDK1IeT",
@@ -128,14 +131,6 @@ const jazzCollection = {
         "253GMpCNwx1TJtASNAeDoP",
         "6dAtGAnHCQ1ujMUZ9Ep82k"
     ],
-    "happy": [
-        "6RuS4udHwx3C9ysk4KXtNw"
-    ],
-    "heavy": [
-        "0tIODqvzGUoEaK26rK4pvX",
-        "3poNEhEAAwqWGnLaQNE0Fs",
-        "6NO4yN3PJL0PeMBPgdBWGq"
-    ],
     "hiphop": [
         "2i1CPudyCUjL50Wqjv8AMI",
         "4ai53dgSBGhQwcFtGyY1bF",
@@ -160,7 +155,6 @@ const jazzCollection = {
         "6RuS4udHwx3C9ysk4KXtNw",
         "7sEmXHrnEnX7PScoJAvSvo",
         "7MewDkQnL8tMeWEBxSWBE2",
-        "6RuS4udHwx3C9ysk4KXtNw",
         "52uuAX0XAdhMmLLpaSaOig",
         "5vLyvkGLk9d9hp9LRQ8RqD",
         "5COMNbVWoe1Kb5UTFAaUwF",

@@ -42,7 +42,6 @@ const initalMappings = {
     "grindcore": ["metal"],
     "grunge": ["rock", "metal"],
     "guitar": ["guitar"],
-    "happy": ["happy"],
     "hard rock": ["rock", "metal"],
     "hardcore": ["metal"],
     "hardstyle": ["electronic"],
