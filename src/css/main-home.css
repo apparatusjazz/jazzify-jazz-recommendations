@@ -59,6 +59,7 @@ div, p {
     border-radius: 3px;
     color: white;
     background-color: rgb(59, 59, 59);
+    max-width: -webkit-fill-available;
 }
 .add-icon {
     border-radius: 100%;
