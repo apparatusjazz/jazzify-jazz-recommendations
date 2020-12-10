@@ -601,7 +601,7 @@ class Home extends Component {
         if (current.length < 1) return;
         let date = Date().split(" ");
         let dateString = `${date[1]}-${date[2]}-${date[3]}`;
-        spotifyApi.createPlaylist("tonydeska", {
+        spotifyApi.createPlaylist(this.displayName, {
             "name": `Jazzify: ${dateString}`,
             "description": "Playlist created by Jazzify Jazz Recommendations"
         }).then(res => {
@@ -633,6 +633,7 @@ class Home extends Component {
         spotifyApi.getMe().then(data => {
             this.country = data.country;
             this.userId = data.id;
+            this.displayName = data.display_name;
             this.getSeedTracks();
             this.setState({ loggedIn: true })
         }).catch(err => this.setState({ loggedIn: false }))
@@ -689,14 +690,14 @@ class Home extends Component {
                         <AccordionDetails>
                             <Typography component={'div'}>
                                 <div className={audioFilterClass}>
-                                    <div>
+                                    <div className="audio-filters">
                                         Audio Filters
-                                <Switch checked={this.state.audioSwitch} size="small" onChange={this.toggleSwitch} />
+                                <Switch checked={this.state.audioSwitch} size="medium" onChange={this.toggleSwitch} />
                                     </div>
                                     {audioF}
                                 </div>
                                 <div className="genre-filter-container">
-                                    Genres
+                                    Base Genres
                                 <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                                     <div>{genres}</div>
                                     {genreFilt}
@@ -756,7 +757,7 @@ class Home extends Component {
                             {audioF}
                         </div>
                         <div className="genre-filter-container">
-                            Genres
+                            Base Genres
                                 <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                             <div>{genres}</div>
                             {genreFilt}
