@@ -465,11 +465,13 @@ class Home extends Component {
     }
 
     addAllToPlaylist() {
-        let recs = this.state.recommendations;
-        let playlistIds = this.state.recommendations.map(el => el.id);
+        let recs = [...this.state.recommendations];
+        let newPlaylist = [...new Set([...this.state.playlist, ...recs])];
+        let newPlaylistIds = [...new Set([...this.state.playlistIDs, ...recs.map(a => a.id)])];
+
         this.setState({
-            playlist: recs,
-            playlistIDs: playlistIds
+            playlist: newPlaylist,
+            playlistIDs: newPlaylistIds
         });
     }
 
@@ -696,7 +698,7 @@ class Home extends Component {
                                     {audioF}
                                 </div>
                                 <div className="genre-filter-container">
-                                    Base Genres
+                                    Seed Genres
                                 <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                                     <div>{genres}</div>
                                     {genreFilt}
@@ -755,7 +757,7 @@ class Home extends Component {
                             {audioF}
                         </div>
                         <div className="genre-filter-container">
-                            Base Genres
+                            Seed Genres
                                 <div><button className="btn-style clear-all" onClick={this.removeAllGenres}>Clear All</button></div>
                             <div>{genres}</div>
                             {genreFilt}
