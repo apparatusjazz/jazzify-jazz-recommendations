@@ -82,7 +82,7 @@ class Home extends Component {
             isPlaying: false,
             currentlyPlaying: "",
             loggedIn: false,
-            playlistLink: "",
+            savedPlaylist: [],
             loading: true,
             tabValue: 0
         }
@@ -597,6 +597,11 @@ class Home extends Component {
         });
     }
     createPlaylist() {
+        const equals = (a, b) =>
+            a.length === b.length &&
+            a.every((v, i) => v === b[i]);
+
+        if (equals(this.state.playlistIDs, this.state.savedPlaylist)) return;
         let current = [...this.state.playlistIDs.map(id => `spotify:track:${id}`)];
         if (current.length < 1) return;
         let date = Date().split(" ");
@@ -606,8 +611,10 @@ class Home extends Component {
             "description": "Playlist created by Jazzify Jazz Recommendations"
         }).then(res => {
             const playlistId = res.id;
-            spotifyApi.addTracksToPlaylist(playlistId, current);
-            this.setState({ playlistLink: playlistId });
+            spotifyApi.addTracksToPlaylist(playlistId, current).then(() => {
+                window.open(`https://open.spotify.com/playlist/${playlistId}`)
+            })
+            this.setState({ savedPlaylist: this.state.playlistIDs });
         }).catch(err => console.log(err.response))
     }
     getCurrentPlayingInfo() {
@@ -657,14 +664,6 @@ class Home extends Component {
             <AddIcon className="add-icon" onClick={() => this.addGenre()} />
         </>;
 
-        const playlistLink = this.state.playlistLink !== "" ? (<a
-            href={`https://open.spotify.com/playlist/${this.state.playlistLink}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Open in Spotify"
-        >
-            <OpenInNewRoundedIcon className="open-playlist" />
-        </a>) : <OpenInNewRoundedIcon className="open-playlist" />;
         const playingInfo = this.getCurrentPlayingInfo();
         const progressClass = this.state.loading ? "show" : "hide";
         const rowClass = !this.state.loading ? "show" : "hide";
@@ -732,7 +731,6 @@ class Home extends Component {
                             <Row className="playlist-row">
                                 <span>
                                     <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
-                                    {playlistLink}
                                 </span>
                                 {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
                             </Row>
@@ -772,7 +770,6 @@ class Home extends Component {
                         <Row className="playlist-row">
                             <span>
                                 <button className="btn-style add-playlist" onClick={this.createPlaylist}>Create Playlist</button>
-                                {playlistLink}
                             </span>
                             {this.state.playlistIDs.length > 0 ? <button onClick={this.clearPlaylist} className="btn-style remove-all">Remove All</button> : ""}
                         </Row>
