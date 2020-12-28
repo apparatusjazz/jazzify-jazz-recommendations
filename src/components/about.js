@@ -25,7 +25,8 @@ function About(props) {
                     <br></br><br></br>
                     The genre filters section adds genres based on your most listened to genres, however, this may not always reflect
                     your actual most listened to genres as Jazzify may add extra genres in processing. You can add and remove genres
-                    and the amount of recommendations based on those genres with the sliders.
+                    and the amount of recommendations based on those genres with the sliders. The jazz music recommendations are based on
+                    these genres. Ideally, the songs and artists in the recommendations will have similar elements to the genres listed.
                     <br></br><br></br>
                     Short audio previews are available for many of the recommendations. Don't sleep on the songs with no previews though,
                     as an avid jazz fan, some of the recommendations with no previews are truly great jazz music.
