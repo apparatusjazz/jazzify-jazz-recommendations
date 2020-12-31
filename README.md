@@ -1,4 +1,8 @@
-In progress...
+# Jazzify
+
+A web app that provides unique jazz recommendations based on your Spotify top genres and audio analysis.
+
+## [Visit Jazzify](https://jazzify.blue/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
